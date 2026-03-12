@@ -1,17 +1,14 @@
+import Container from "./Container";
+
 function ExamplesSection() {
   return (
     <section
       style={{
-        padding: "60px 24px",
+        padding: "60px 0",
         background: "#fcfbff",
       }}
     >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
+      <Container>
         <h2
           style={{
             fontSize: "32px",
@@ -34,7 +31,7 @@ function ExamplesSection() {
           <ExampleCard />
           <ExampleCard />
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -1,56 +1,11 @@
-function HowItWorksSection() {
-  return (
-    <section
-      style={{
-        padding: "70px 24px",
-        background: "#ffffff",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
-        <h2
-          style={{
-            fontSize: "32px",
-            color: "#3d3a6d",
-            marginBottom: "40px",
-            fontWeight: 800,
-          }}
-        >
-          Comment ça marche ?
-        </h2>
+import Container from "./Container";
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "30px",
-          }}
-        >
-          <StepCard
-            title="Téléversez 2-4 photos"
-            description="Importez facilement les photos de votre enfant en quelques secondes."
-          />
+type StepCardProps = {
+  title: string;
+  description: string;
+};
 
-          <StepCard
-            title="Choisissez un thème"
-            description="Conte, super-héros, pirate ou futuriste, laissez parler votre imagination."
-          />
-
-          <StepCard
-            title="Visualisez un aperçu"
-            description="Obtenez un aperçu magique avant de finaliser votre commande."
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function StepCard({ title, description }: any) {
+function StepCard({ title, description }: StepCardProps) {
   return (
     <div
       style={{
@@ -90,6 +45,51 @@ function StepCard({ title, description }: any) {
         {description}
       </p>
     </div>
+  );
+}
+
+function HowItWorksSection() {
+  return (
+    <section
+      style={{
+        padding: "70px 0",
+        background: "#ffffff",
+      }}
+    >
+      <Container>
+        <h2
+          style={{
+            fontSize: "32px",
+            color: "#3d3a6d",
+            marginBottom: "40px",
+            fontWeight: 800,
+          }}
+        >
+          Comment ça marche ?
+        </h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "30px",
+          }}
+        >
+          <StepCard
+            title="Téléversez 2-4 photos"
+            description="Importez facilement les photos de votre enfant en quelques secondes."
+          />
+          <StepCard
+            title="Choisissez un thème"
+            description="Conte, super-héros, pirate ou futuriste, laissez parler votre imagination."
+          />
+          <StepCard
+            title="Visualisez un aperçu"
+            description="Obtenez un aperçu magique avant de finaliser votre commande."
+          />
+        </div>
+      </Container>
+    </section>
   );
 }
 

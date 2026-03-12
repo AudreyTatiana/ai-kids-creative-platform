@@ -1,17 +1,14 @@
+import Container from "./Container";
+
 function ProductsSection() {
   return (
     <section
       style={{
-        padding: "70px 24px",
+        padding: "70px 0",
         background: "#fcfbff",
       }}
     >
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
+      <Container>
         <h2
           style={{
             fontSize: "32px",
@@ -30,25 +27,16 @@ function ProductsSection() {
             gap: "30px",
           }}
         >
-          <ProductCard
-            title="Pack d'images"
-            price="29,90€"
-          />
-          <ProductCard
-            title="Album Photo"
-            price="49,90€"
-          />
-          <ProductCard
-            title="Histoire personnalisée"
-            price="39,90€"
-          />
+          <ProductCard title="Pack d'images" price="29,90€" />
+          <ProductCard title="Album Photo" price="49,90€" />
+          <ProductCard title="Histoire personnalisée" price="39,90€" />
         </div>
-      </div>
+      </Container>
     </section>
   );
 }
 
-function ProductCard({ title, price }: any) {
+function ProductCard({ title, price }: { title: string; price: string }) {
   return (
     <div
       style={{
