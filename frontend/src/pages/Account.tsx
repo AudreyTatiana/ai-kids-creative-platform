@@ -98,7 +98,7 @@ function Account() {
                   marginBottom: "18px",
                 }}
               >
-                M
+                A
               </div>
 
               <h2
@@ -109,7 +109,7 @@ function Account() {
                   fontWeight: 800,
                 }}
               >
-                Marie Dupont
+                Audrey KAMGA
               </h2>
 
               <p
@@ -119,7 +119,7 @@ function Account() {
                   fontSize: "15px",
                 }}
               >
-                marie.dupont@email.com
+                audreytatiana@gmail.com
               </p>
 
               <div style={{ display: "grid", gap: "14px", marginBottom: "22px" }}>
