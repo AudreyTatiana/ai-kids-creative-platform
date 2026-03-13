@@ -1,27 +1,34 @@
 import Container from "./Container";
+import exampleImage from "../assets/images/ui-pack.png";
 
 type StepCardProps = {
   title: string;
   description: string;
+  image: string;
+  position: string;
 };
 
-function StepCard({ title, description }: StepCardProps) {
+function StepCard({ title, description, image, position }: StepCardProps) {
   return (
     <div
       style={{
         background: "#f6f3ff",
-        padding: "30px",
+        padding: "20px",
         borderRadius: "18px",
         textAlign: "center",
       }}
     >
-      <div
+      <img
+        src={image}
+        alt={title}
         style={{
-          height: "60px",
-          width: "60px",
-          background: "#d8c8ff",
-          borderRadius: "50%",
-          margin: "0 auto 20px",
+          width: "100%",
+          height: "160px",
+          objectFit: "cover",
+          objectPosition: position,
+          borderRadius: "14px",
+          marginBottom: "20px",
+          display: "block",
         }}
       />
 
@@ -40,6 +47,7 @@ function StepCard({ title, description }: StepCardProps) {
           fontSize: "15px",
           color: "#6a678f",
           lineHeight: 1.6,
+          margin: 0,
         }}
       >
         {description}
@@ -78,14 +86,20 @@ function HowItWorksSection() {
           <StepCard
             title="Téléversez 2-4 photos"
             description="Importez facilement les photos de votre enfant en quelques secondes."
+            image={exampleImage}
+            position="left center"
           />
           <StepCard
             title="Choisissez un thème"
             description="Conte, super-héros, pirate ou futuriste, laissez parler votre imagination."
+            image={exampleImage}
+            position="center center"
           />
           <StepCard
             title="Visualisez un aperçu"
             description="Obtenez un aperçu magique avant de finaliser votre commande."
+            image={exampleImage}
+            position="right center"
           />
         </div>
       </Container>

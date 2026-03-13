@@ -1,4 +1,5 @@
 import Container from "./Container";
+import heroImage from "../assets/images/ui-pack.png";
 
 function HeroSection() {
   return (
@@ -70,7 +71,18 @@ function HeroSection() {
                 fontWeight: 700,
               }}
             >
-              Illustration
+              <img
+               src={heroImage}
+               alt="Preview"
+               style={{
+                 width: "100%",
+                 height: "320px",
+                 objectFit: "contain",
+                 backgroundColor: "#fff",
+                 borderRadius: "18px",
+                 display: "block",
+              }}
+/>
             </div>
           </div>
         </div>

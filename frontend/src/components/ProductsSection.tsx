@@ -1,4 +1,5 @@
 import Container from "./Container";
+import productImage from "../assets/images/ui-pack.png";
 
 function ProductsSection() {
   return (
@@ -27,16 +28,43 @@ function ProductsSection() {
             gap: "30px",
           }}
         >
-          <ProductCard title="Pack d'images" price="29,90€" />
-          <ProductCard title="Album Photo" price="49,90€" />
-          <ProductCard title="Histoire personnalisée" price="39,90€" />
+          <ProductCard
+            title="Pack d'images"
+            price="29,90€"
+            image={productImage}
+            position="left center"
+          />
+          <ProductCard
+            title="Album Photo"
+            price="49,90€"
+            image={productImage}
+            position="center center"
+          />
+          <ProductCard
+            title="Histoire personnalisée"
+            price="39,90€"
+            image={productImage}
+            position="right center"
+          />
         </div>
       </Container>
     </section>
   );
 }
 
-function ProductCard({ title, price }: { title: string; price: string }) {
+type ProductCardProps = {
+  title: string;
+  price: string;
+  image: string;
+  position: string;
+};
+
+function ProductCard({
+  title,
+  price,
+  image,
+  position,
+}: ProductCardProps) {
   return (
     <div
       style={{
@@ -47,13 +75,17 @@ function ProductCard({ title, price }: { title: string; price: string }) {
         boxShadow: "0 10px 30px rgba(117, 100, 170, 0.12)",
       }}
     >
-      <div
+      <img
+        src={image}
+        alt={title}
         style={{
-          height: "160px",
+          width: "100%",
+          height: "180px",
+          objectFit: "cover",
+          objectPosition: position,
           borderRadius: "14px",
-          background:
-            "linear-gradient(135deg, #d8c8ff 0%, #bfe2ff 50%, #ffe7f5 100%)",
           marginBottom: "15px",
+          display: "block",
         }}
       />
 
@@ -72,6 +104,7 @@ function ProductCard({ title, price }: { title: string; price: string }) {
           fontSize: "16px",
           fontWeight: 700,
           color: "#f6b93b",
+          margin: 0,
         }}
       >
         {price}

@@ -1,4 +1,5 @@
 import Container from "./Container";
+import exampleImage from "../assets/images/ui-pack.png";
 
 function ExamplesSection() {
   return (
@@ -27,31 +28,67 @@ function ExamplesSection() {
             gap: "20px",
           }}
         >
-          <ExampleCard />
-          <ExampleCard />
-          <ExampleCard />
+          <ExampleCard
+            title="Univers féerique"
+            image={exampleImage}
+            position="left center"
+          />
+          <ExampleCard
+            title="Aventure magique"
+            image={exampleImage}
+            position="center center"
+          />
+          <ExampleCard
+            title="Héros d’histoire"
+            image={exampleImage}
+            position="right center"
+          />
         </div>
       </Container>
     </section>
   );
 }
 
-function ExampleCard() {
+type ExampleCardProps = {
+  title: string;
+  image: string;
+  position: string;
+};
+
+function ExampleCard({ title, image, position }: ExampleCardProps) {
   return (
     <div
       style={{
-        background:
-          "linear-gradient(135deg, #d8c8ff 0%, #bfe2ff 50%, #ffe7f5 100%)",
-        height: "160px",
-        borderRadius: "16px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontWeight: 700,
-        color: "#4b4780",
+        background: "#fff",
+        borderRadius: "18px",
+        overflow: "hidden",
+        boxShadow: "0 10px 30px rgba(117, 100, 170, 0.12)",
       }}
     >
-      Image Exemple
+      <img
+        src={image}
+        alt={title}
+        style={{
+          width: "100%",
+          height: "220px",
+          objectFit: "cover",
+          objectPosition: position,
+          display: "block",
+        }}
+      />
+
+      <div style={{ padding: "16px" }}>
+        <h3
+          style={{
+            margin: 0,
+            fontSize: "18px",
+            color: "#3d3a6d",
+            fontWeight: 700,
+          }}
+        >
+          {title}
+        </h3>
+      </div>
     </div>
   );
 }
