@@ -64,7 +64,7 @@ function Services() {
                 textTransform: "uppercase",
               }}
             >
-              PetitsRêves
+              PETITSRÊVES
             </p>
 
             <h1
@@ -98,23 +98,13 @@ function Services() {
               display: "grid",
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "24px",
-              alignItems: "stretch",
             }}
           >
-            {services.slice(0, 3).map((service) => (
-              <ServiceCard key={service.title} {...service} />
-            ))}
-          </div>
+            <ServiceCard {...services[0]} />
+            <ServiceCard {...services[1]} />
+            <ServiceCard {...services[2]} />
 
-          <div
-            style={{
-              marginTop: "24px",
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "24px",
-            }}
-          >
-            <div style={{ gridColumn: "1 / 2" }}>
+            <div style={{ gridColumn: "2 / 3" }}>
               <ServiceCard {...services[3]} />
             </div>
           </div>
@@ -145,13 +135,20 @@ function ServiceCard({
         background: "#ffffff",
         borderRadius: "20px",
         padding: "28px 24px",
-        boxShadow: "0 12px 30px rgba(117, 100, 170, 0.08)",
+        boxShadow: "0 20px 50px rgba(120, 100, 180, 0.12)",
         border: "1px solid #f0ebfa",
         textAlign: "center",
         minHeight: "250px",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        transition: "all 0.3s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-6px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0)";
       }}
     >
       <div>
