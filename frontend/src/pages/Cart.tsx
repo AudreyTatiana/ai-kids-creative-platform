@@ -1,5 +1,6 @@
 import Layout from "../components/Layout";
 import Container from "../components/Container";
+import AppNavbar from "../components/AppNavbar";
 
 function Cart() {
   const cartItems = [
@@ -19,6 +20,7 @@ function Cart() {
 
   return (
     <Layout>
+      <AppNavbar />
       <section
         style={{
           minHeight: "100vh",
