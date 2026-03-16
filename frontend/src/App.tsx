@@ -11,6 +11,7 @@ import ThemeSelection from "./pages/ThemeSelection";
 import PreviewPage from "./pages/PreviewPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import PaymentPage from "./pages/PaymentPage";
+import ConfirmationPage from "./pages/ConfirmationPage";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/preview" element={<PreviewPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/confirmation" element={<ConfirmationPage />} />
       </Routes>
     </BrowserRouter>
   );

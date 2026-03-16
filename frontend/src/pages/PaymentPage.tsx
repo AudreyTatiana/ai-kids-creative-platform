@@ -1,8 +1,10 @@
 import Layout from "../components/Layout";
 import Container from "../components/Container";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 function PaymentPage() {
+    const navigate = useNavigate();
   return (
     <Layout>
       <Navbar />
@@ -205,21 +207,22 @@ function PaymentPage() {
                   </div>
 
                   <button
+                    onClick={() => navigate("/confirmation")}
                     style={{
-                      width: "100%",
-                      marginTop: "22px",
-                      background: "#f6b93b",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "14px",
-                      padding: "14px 18px",
-                      fontSize: "15px",
-                      fontWeight: 700,
-                      cursor: "pointer",
+                    width: "100%",
+                    marginTop: "22px",
+                    background: "#f6b93b",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "14px",
+                    padding: "14px 18px",
+                    fontSize: "15px",
+                    fontWeight: 700,
+                    cursor: "pointer",
                     }}
-                  >
+                >
                     Payer en toute sécurité
-                  </button>
+                 </button>
                 </div>
 
                 <div
