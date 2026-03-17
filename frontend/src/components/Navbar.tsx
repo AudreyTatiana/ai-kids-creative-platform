@@ -4,11 +4,11 @@ function Navbar() {
   return (
     <header
       style={{
-        backgroundColor: "#ffffff",
-        borderBottom: "1px solid #e9e4f5",
+        background: "#ffffff",
+        borderBottom: "1px solid #eee",
         position: "sticky",
         top: 0,
-        zIndex: 10,
+        zIndex: 100,
       }}
     >
       <div
@@ -19,21 +19,49 @@ function Navbar() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          gap: "24px",
         }}
       >
-        <nav style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-          <Link to="/" style={linkStyle}>
+        <div
+          style={{
+            fontWeight: 800,
+            fontSize: "22px",
+            color: "#3d3a6d",
+          }}
+        >
+          PetitsRêves
+        </div>
+
+        <nav
+          style={{
+            display: "flex",
+            gap: "28px",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Link to="/examples" style={linkStyle}>
             Exemples
           </Link>
-          <Link to="/services" style={linkStyle}>
+
+          <Link to="/products" style={linkStyle}>
             Produits
           </Link>
-          <Link to="/account" style={linkStyle}>
+
+          <Link to="/services" style={linkStyle}>
+            Services
+          </Link>
+
+          <Link to="/faq" style={linkStyle}>
             FAQ
+          </Link>
+
+          <Link to="/login" style={linkStyle}>
+            Connexion
           </Link>
         </nav>
 
-        <Link to="/services" style={buttonStyle}>
+        <Link to="/upload" style={buttonStyle}>
           Créer mon projet
         </Link>
       </div>
@@ -51,7 +79,7 @@ const linkStyle: React.CSSProperties = {
 const buttonStyle: React.CSSProperties = {
   textDecoration: "none",
   background: "#f6b93b",
-  color: "#fff",
+  color: "white",
   padding: "12px 20px",
   borderRadius: "10px",
   fontWeight: 700,

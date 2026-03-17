@@ -1,6 +1,6 @@
 import Layout from "../components/Layout";
 import Container from "../components/Container";
-import AppNavbar from "../components/AppNavbar";
+import Navbar from "../components/Navbar";
 
 function Services() {
   const services = [
@@ -40,7 +40,8 @@ function Services() {
 
   return (
     <Layout>
-       <AppNavbar />
+      <Navbar />
+
       <section
         style={{
           minHeight: "100vh",
@@ -112,7 +113,6 @@ function Services() {
           </div>
         </Container>
       </section>
-
     </Layout>
   );
 }

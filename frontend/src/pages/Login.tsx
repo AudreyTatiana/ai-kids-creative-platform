@@ -1,235 +1,159 @@
+import { useState } from "react";
 import Layout from "../components/Layout";
 import Container from "../components/Container";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || "Erreur de connexion");
+        return;
+      }
+
+      // ✅ stockage token
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      setSuccess("Connexion réussie 🎉");
+
+      // ✅ redirection après 1.5s
+      setTimeout(() => {
+        if (data.user.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/home");
+        }
+      }, 1500);
+    } catch (err) {
+      setError("Erreur serveur");
+    }
+  };
+
   return (
     <Layout>
       <section
         style={{
           minHeight: "100vh",
-          width: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          background: "linear-gradient(135deg, #f6f1ff 0%, #eef5ff 100%)",
-          padding: "40px 0",
+          background: "linear-gradient(135deg,#f6f1ff,#eef5ff)",
         }}
       >
         <Container>
-          <div
+          <form
+            onSubmit={handleLogin}
             style={{
-              maxWidth: "1100px",
-              width: "100%",
-              margin: "0 auto",
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              background: "#fff",
-              borderRadius: "28px",
-              overflow: "hidden",
-              boxShadow: "0 18px 40px rgba(117, 100, 170, 0.14)",
+              maxWidth: 500,
+              margin: "auto",
+              background: "white",
+              padding: 40,
+              borderRadius: 20,
+              boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
             }}
           >
-            <div
-              style={{
-                background:
-                  "linear-gradient(135deg, #d9ccff 0%, #c6e4ff 55%, #ffe8f7 100%)",
-                padding: "60px 40px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
-              <p
-                style={{
-                  margin: "0 0 14px",
-                  color: "#4f7cff",
-                  fontWeight: 700,
-                  fontSize: "14px",
-                  letterSpacing: "0.5px",
-                  textTransform: "uppercase",
-                }}
-              >
-                Bon retour
-              </p>
+            <h1 style={{ textAlign: "center", marginBottom: 30 }}>
+              Connexion
+            </h1>
 
-              <h1
-                style={{
-                  margin: "0 0 18px",
-                  fontSize: "42px",
-                  lineHeight: 1.15,
-                  color: "#3d3a6d",
-                  fontWeight: 800,
-                }}
-              >
-                Heureuse de vous revoir ✨
-              </h1>
-
-              <p
-                style={{
-                  margin: 0,
-                  color: "#5f5a8a",
-                  fontSize: "18px",
-                  lineHeight: 1.8,
-                  maxWidth: "420px",
-                }}
-              >
-                Connectez-vous pour retrouver vos créations, suivre vos commandes
-                et continuer votre projet magique en toute simplicité.
-              </p>
-
+            {error && (
               <div
                 style={{
-                  marginTop: "28px",
-                  background: "rgba(255,255,255,0.65)",
-                  borderRadius: "18px",
-                  padding: "18px 20px",
-                  maxWidth: "420px",
+                  background: "#ffe6e6",
+                  color: "#d10000",
+                  padding: 10,
+                  borderRadius: 8,
+                  marginBottom: 20,
                 }}
               >
-                <p
-                  style={{
-                    margin: 0,
-                    color: "#3d3a6d",
-                    fontSize: "15px",
-                    lineHeight: 1.7,
-                    fontWeight: 600,
-                  }}
-                >
-                  Vos souvenirs créatifs vous attendent.
-                </p>
+                {error}
               </div>
-            </div>
+            )}
 
-            <div
-              style={{
-                padding: "48px 42px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-              }}
-            >
-              <div style={{ marginBottom: "28px" }}>
-                <h2
-                  style={{
-                    margin: "0 0 10px",
-                    fontSize: "34px",
-                    color: "#3d3a6d",
-                    fontWeight: 800,
-                    textAlign: "center",
-                  }}
-                >
-                  Connexion
-                </h2>
-
-                <p
-                  style={{
-                    margin: 0,
-                    textAlign: "center",
-                    color: "#6a678f",
-                    fontSize: "15px",
-                    lineHeight: 1.6,
-                  }}
-                >
-                  Entrez vos informations pour accéder à votre espace.
-                </p>
-              </div>
-
-              <form style={{ display: "grid", gap: "18px" }}>
-                <div>
-                  <label style={labelStyle}>Adresse email</label>
-                  <input
-                    type="email"
-                    placeholder="exemple@email.com"
-                    style={inputStyle}
-                  />
-                </div>
-
-                <div>
-                  <label style={labelStyle}>Mot de passe</label>
-                  <input
-                    type="password"
-                    placeholder="Votre mot de passe"
-                    style={inputStyle}
-                  />
-                </div>
-
-                <div style={{ textAlign: "right" }}>
-                  <a
-                    href="#"
-                    style={{
-                      color: "#4f7cff",
-                      textDecoration: "none",
-                      fontSize: "14px",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Mot de passe oublié ?
-                  </a>
-                </div>
-
-                <button type="submit" style={loginButtonStyle}>
-                  Se connecter
-                </button>
-              </form>
-
-              <p
+            {success && (
+              <div
                 style={{
-                  marginTop: "22px",
-                  marginBottom: 0,
-                  textAlign: "center",
-                  color: "#6a678f",
-                  fontSize: "15px",
+                  background: "#e6fff1",
+                  color: "#00a86b",
+                  padding: 10,
+                  borderRadius: 8,
+                  marginBottom: 20,
                 }}
               >
-                Pas encore de compte ?{" "}
-                <Link
-                  to="/register"
-                  style={{
-                    color: "#4f7cff",
-                    textDecoration: "none",
-                    fontWeight: 700,
-                  }}
-                >
-                  Inscrivez-vous
-                </Link>
-              </p>
-            </div>
-          </div>
+                {success}
+              </div>
+            )}
+
+            <input
+              type="email"
+              placeholder="Email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={inputStyle}
+            />
+
+            <input
+              type="password"
+              placeholder="Mot de passe"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={inputStyle}
+            />
+
+            <button style={buttonStyle}>Se connecter</button>
+          </form>
         </Container>
       </section>
     </Layout>
   );
 }
 
-const labelStyle: React.CSSProperties = {
-  display: "block",
-  marginBottom: "8px",
-  color: "#3d3a6d",
-  fontWeight: 700,
-  fontSize: "15px",
-};
-
-const inputStyle: React.CSSProperties = {
+const inputStyle = {
   width: "100%",
-  padding: "14px 16px",
-  borderRadius: "12px",
-  border: "1px solid #d9d4ee",
-  fontSize: "15px",
-  outline: "none",
-  boxSizing: "border-box",
-  background: "#fff",
+  padding: 14,
+  marginBottom: 15,
+  borderRadius: 10,
+  border: "1px solid #ddd",
+  fontSize: 16,
 };
 
-const loginButtonStyle: React.CSSProperties = {
-  marginTop: "8px",
-  background: "#4f7cff",
-  color: "#fff",
+const buttonStyle = {
+  width: "100%",
+  padding: 14,
+  background: "#f6b93b",
   border: "none",
-  borderRadius: "12px",
-  padding: "14px 18px",
-  fontSize: "16px",
-  fontWeight: 700,
+  borderRadius: 10,
+  fontWeight: "bold",
+  fontSize: 16,
   cursor: "pointer",
 };
 
