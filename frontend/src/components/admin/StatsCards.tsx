@@ -55,13 +55,14 @@ function StatsCards() {
     <section
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
+        gridTemplateColumns: "repeat(4, 1fr)",
         gap: "18px",
       }}
     >
       <StatCard title="Commandes" value="128" subtitle="Ce mois-ci" />
       <StatCard title="Produits actifs" value="12" subtitle="Catalogue" />
       <StatCard title="Thèmes actifs" value="8" subtitle="Disponibles" />
+      <StatCard title="Livraisons à domicile" value="17" subtitle="À suivre" />
     </section>
   );
 }

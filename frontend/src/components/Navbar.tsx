@@ -1,89 +1,106 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/images/logo.png";
 
 function Navbar() {
+  const navigate = useNavigate();
+
   return (
-    <header
+    <nav
       style={{
+        width: "100%",
         background: "#ffffff",
-        borderBottom: "1px solid #eee",
+        padding: "16px 40px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        boxShadow: "0 2px 12px rgba(0,0,0,0.04)",
         position: "sticky",
         top: 0,
-        zIndex: 100,
+        zIndex: 1000,
       }}
     >
+      {/* LEFT — Logo + Brand */}
       <div
+        onClick={() => navigate("/home")}
         style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-          padding: "16px 24px",
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
-          gap: "24px",
+          cursor: "pointer",
         }}
       >
-        <div
+        <img
+          src={logo}
+          alt="PetitsRêves"
           style={{
+            width: 42,
+            height: 42,
+            objectFit: "cover",
+            borderRadius: 12,
+            marginRight: 12,
+          }}
+        />
+
+        <h2
+          style={{
+            fontSize: "26px",
             fontWeight: 800,
-            fontSize: "22px",
-            color: "#3d3a6d",
+            color: "#2f2c5a",
+            margin: 0,
           }}
         >
           PetitsRêves
-        </div>
-
-        <nav
-          style={{
-            display: "flex",
-            gap: "28px",
-            alignItems: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          <Link to="/examples" style={linkStyle}>
-            Exemples
-          </Link>
-
-          <Link to="/products" style={linkStyle}>
-            Produits
-          </Link>
-
-          <Link to="/services" style={linkStyle}>
-            Services
-          </Link>
-
-          <Link to="/faq" style={linkStyle}>
-            FAQ
-          </Link>
-
-          <Link to="/login" style={linkStyle}>
-            Connexion
-          </Link>
-        </nav>
-
-        <Link to="/upload" style={buttonStyle}>
-          Créer mon projet
-        </Link>
+        </h2>
       </div>
-    </header>
+
+      {/* CENTER — Menu */}
+      <div
+        style={{
+          display: "flex",
+          gap: "40px",
+          fontWeight: 600,
+          color: "#2f2c5a",
+        }}
+      >
+        <span style={{ cursor: "pointer" }} onClick={() => navigate("/examples")}>
+          Exemples
+        </span>
+
+        <span style={{ cursor: "pointer" }} onClick={() => navigate("/products")}>
+          Produits
+        </span>
+
+        <span style={{ cursor: "pointer" }} onClick={() => navigate("/services")}>
+          Services
+        </span>
+
+        <span style={{ cursor: "pointer" }} onClick={() => navigate("/faq")}>
+          FAQ
+        </span>
+
+        <span style={{ cursor: "pointer" }} onClick={() => navigate("/login")}>
+          Connexion
+        </span>
+      </div>
+
+      {/* RIGHT — CTA */}
+      <button
+        onClick={() => navigate("/upload")}
+        style={{
+          background: "#E7A928",
+          border: "none",
+          padding: "14px 28px",
+          borderRadius: "28px",
+          color: "#fff",
+          fontWeight: 700,
+          fontSize: "15px",
+          cursor: "pointer",
+          boxShadow: "0 6px 16px rgba(231,169,40,0.35)",
+        }}
+      >
+        Créer mon projet
+      </button>
+    </nav>
   );
 }
-
-const linkStyle: React.CSSProperties = {
-  textDecoration: "none",
-  color: "#3d3a6d",
-  fontWeight: 600,
-  fontSize: "15px",
-};
-
-const buttonStyle: React.CSSProperties = {
-  textDecoration: "none",
-  background: "#f6b93b",
-  color: "white",
-  padding: "12px 20px",
-  borderRadius: "10px",
-  fontWeight: 700,
-  fontSize: "14px",
-};
 
 export default Navbar;

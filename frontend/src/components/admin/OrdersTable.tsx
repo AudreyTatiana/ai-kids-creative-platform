@@ -66,6 +66,26 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
+function DeliveryBadge({ mode }: { mode: string }) {
+  const isHome = mode === "Domicile";
+
+  return (
+    <span
+      style={{
+        display: "inline-block",
+        padding: "6px 12px",
+        borderRadius: "999px",
+        background: isHome ? "#fff1f1" : "#eef5ff",
+        color: isHome ? "#c0392b" : "#3973d6",
+        fontSize: "13px",
+        fontWeight: 700,
+      }}
+    >
+      {mode}
+    </span>
+  );
+}
+
 const tableButtonStyle: React.CSSProperties = {
   background: "#fff",
   color: "#6d67a0",
@@ -82,6 +102,7 @@ function OrdersTable() {
     {
       customer: "Marie Dupont",
       product: "Pack d'images",
+      delivery: "Email",
       status: "En attente",
       amount: "29,90€",
       action: "Détails",
@@ -89,6 +110,7 @@ function OrdersTable() {
     {
       customer: "Sophie Martin",
       product: "Album Photo",
+      delivery: "Domicile",
       status: "Payée",
       amount: "49,90€",
       action: "Voir",
@@ -96,6 +118,7 @@ function OrdersTable() {
     {
       customer: "Nadia Benali",
       product: "Histoire personnalisée",
+      delivery: "Domicile",
       status: "En cours",
       amount: "39,90€",
       action: "Suivre",
@@ -160,6 +183,7 @@ function OrdersTable() {
             <tr style={{ background: "#faf8ff" }}>
               <TableHeader>Client</TableHeader>
               <TableHeader>Produit</TableHeader>
+              <TableHeader>Livraison</TableHeader>
               <TableHeader>Statut</TableHeader>
               <TableHeader>Montant</TableHeader>
               <TableHeader>Action</TableHeader>
@@ -170,6 +194,9 @@ function OrdersTable() {
               <tr key={`${order.customer}-${order.product}`}>
                 <TableCell>{order.customer}</TableCell>
                 <TableCell>{order.product}</TableCell>
+                <TableCell>
+                  <DeliveryBadge mode={order.delivery} />
+                </TableCell>
                 <TableCell>
                   <StatusBadge status={order.status} />
                 </TableCell>

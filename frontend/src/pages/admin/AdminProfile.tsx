@@ -1,11 +1,11 @@
-import ClientLayout from "../components/client/ClientLayout";
+import AdminLayout from "../../components/admin/AdminLayout";
 
-function Account() {
+function AdminProfile() {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
 
   return (
-    <ClientLayout>
+    <AdminLayout>
       <div style={{ display: "grid", gap: "24px" }}>
         <header
           style={{
@@ -14,28 +14,37 @@ function Account() {
             padding: "20px 24px",
             boxShadow: "0 18px 40px rgba(117, 100, 170, 0.10)",
             border: "1px solid #efe9fb",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: "16px",
+            flexWrap: "wrap",
           }}
         >
-          <h2
-            style={{
-              margin: "0 0 6px",
-              color: "#3d3a6d",
-              fontSize: "28px",
-              fontWeight: 800,
-            }}
-          >
-            Mon profil
-          </h2>
+          <div>
+            <h2
+              style={{
+                margin: "0 0 6px",
+                color: "#3d3a6d",
+                fontSize: "28px",
+                fontWeight: 800,
+              }}
+            >
+              Mon profil
+            </h2>
 
-          <p
-            style={{
-              margin: 0,
-              color: "#7a7699",
-              fontSize: "15px",
-            }}
-          >
-            Consultez vos informations personnelles et suivez votre activité.
-          </p>
+            <p
+              style={{
+                margin: 0,
+                color: "#7a7699",
+                fontSize: "15px",
+              }}
+            >
+              Consultez et gérez les informations du compte administrateur.
+            </p>
+          </div>
+
+          <button style={primaryButtonStyle}>Modifier le profil</button>
         </header>
 
         <section
@@ -71,7 +80,7 @@ function Account() {
                 margin: "0 auto 18px",
               }}
             >
-              {user?.firstName?.[0] || "U"}
+              {user?.firstName?.[0] || "A"}
             </div>
 
             <h3
@@ -82,7 +91,7 @@ function Account() {
                 fontWeight: 800,
               }}
             >
-              {user?.firstName || "Utilisateur"} {user?.lastName || ""}
+              {user?.firstName || "Admin"} {user?.lastName || "PetitsRêves"}
             </h3>
 
             <p
@@ -92,7 +101,7 @@ function Account() {
                 fontSize: "15px",
               }}
             >
-              {user?.email || "client@email.com"}
+              {user?.email || "admin@petitsreves.com"}
             </p>
 
             <span
@@ -100,13 +109,13 @@ function Account() {
                 display: "inline-block",
                 padding: "8px 14px",
                 borderRadius: "999px",
-                background: "#eef5ff",
-                color: "#3973d6",
+                background: "#ebfff1",
+                color: "#1f9d57",
                 fontSize: "13px",
                 fontWeight: 700,
               }}
             >
-              Client
+              Administrateur
             </span>
           </div>
 
@@ -138,10 +147,13 @@ function Account() {
                   gap: "16px",
                 }}
               >
-                <InfoCard label="Prénom" value={user?.firstName || "Utilisateur"} />
-                <InfoCard label="Nom" value={user?.lastName || "-"} />
-                <InfoCard label="Email" value={user?.email || "client@email.com"} />
-                <InfoCard label="Rôle" value={user?.role || "client"} />
+                <InfoCard label="Prénom" value={user?.firstName || "Admin"} />
+                <InfoCard label="Nom" value={user?.lastName || "PetitsRêves"} />
+                <InfoCard
+                  label="Email"
+                  value={user?.email || "admin@petitsreves.com"}
+                />
+                <InfoCard label="Rôle" value={user?.role || "admin"} />
               </div>
             </div>
 
@@ -162,18 +174,42 @@ function Account() {
                   fontWeight: 800,
                 }}
               >
-                Actions
+                Sécurité du compte
               </h3>
 
               <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
-                <button style={primaryBtn}>Modifier mes informations</button>
-                <button style={secondaryBtn}>Changer le mot de passe</button>
+                <button style={primaryButtonStyle}>Modifier le profil</button>
+                <button style={secondaryButtonStyle}>
+                  Changer le mot de passe
+                </button>
               </div>
+            </div>
+
+            <div
+              style={{
+                background: "#fff8ef",
+                border: "1px solid #f3dfb6",
+                borderRadius: "22px",
+                padding: "20px",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  color: "#7a7699",
+                  fontSize: "14px",
+                  lineHeight: 1.7,
+                }}
+              >
+                Ce compte dispose des droits administrateur et peut gérer les
+                commandes, les paiements, les produits, les thèmes et les
+                livraisons.
+              </p>
             </div>
           </div>
         </section>
       </div>
-    </ClientLayout>
+    </AdminLayout>
   );
 }
 
@@ -212,7 +248,7 @@ function InfoCard({ label, value }: { label: string; value: string }) {
   );
 }
 
-const primaryBtn: React.CSSProperties = {
+const primaryButtonStyle: React.CSSProperties = {
   background: "linear-gradient(135deg, #6f8fff 0%, #9c8cff 100%)",
   color: "#fff",
   border: "none",
@@ -223,7 +259,7 @@ const primaryBtn: React.CSSProperties = {
   cursor: "pointer",
 };
 
-const secondaryBtn: React.CSSProperties = {
+const secondaryButtonStyle: React.CSSProperties = {
   background: "#fff",
   color: "#6d67a0",
   border: "1px solid #ddd4f2",
@@ -234,4 +270,4 @@ const secondaryBtn: React.CSSProperties = {
   cursor: "pointer",
 };
 
-export default Account;
+export default AdminProfile;

@@ -1,8 +1,11 @@
 import Layout from "../components/Layout";
 import Container from "../components/Container";
 import Navbar from "../components/Navbar";
+import { useNavigate } from "react-router-dom";
 
 function Services() {
+  const navigate = useNavigate();
+
   const services = [
     {
       icon: "🎨",
@@ -11,6 +14,7 @@ function Services() {
         "Transformez les photos de votre enfant en univers féeriques, doux et uniques selon le thème de votre choix.",
       badge: "Le plus aimé",
       button: "Découvrir",
+      action: () => navigate("/services/ia-examples"),
     },
     {
       icon: "📖",
@@ -19,6 +23,7 @@ function Services() {
         "Souvenirs durables sous forme d’albums photo et de livres illustrés personnalisés pour conserver les plus beaux moments.",
       badge: "Papier premium",
       button: "Découvrir",
+      action: () => navigate("/services/albums-examples"),
     },
     {
       icon: "🧿",
@@ -27,6 +32,7 @@ function Services() {
         "Affiches et objets personnalisés pour une chambre apaisante et pleine de poésie.",
       badge: "Coup de cœur",
       button: "Découvrir",
+      action: () => navigate("/services/decoration-examples"),
     },
     {
       icon: "🎁",
@@ -35,6 +41,7 @@ function Services() {
         "Coffrets pensés pour offrir : naissance, anniversaire, baptême ou souvenirs précieux à partager.",
       badge: "Idée cadeau",
       button: "Découvrir",
+      action: () => navigate("/services/gift-examples"),
     },
   ];
 
@@ -123,6 +130,7 @@ type ServiceCardProps = {
   description: string;
   badge: string;
   button: string;
+  action: () => void;
 };
 
 function ServiceCard({
@@ -131,6 +139,7 @@ function ServiceCard({
   description,
   badge,
   button,
+  action,
 }: ServiceCardProps) {
   return (
     <div
@@ -213,6 +222,7 @@ function ServiceCard({
 
         <div>
           <button
+            onClick={action}
             style={{
               background: "#ffffff",
               color: "#6d67a0",
