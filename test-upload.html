@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Test Upload IA</title>
+  </head>
+  <body>
+    <h2>Test upload image + thème</h2>
+
+    <form id="testForm">
+      <div>
+        <label>Thème :</label>
+        <select name="theme" id="theme">
+          <option value="Conte">Conte</option>
+          <option value="Super-héros">Super-héros</option>
+          <option value="Pirate">Pirate</option>
+          <option value="Univers féerique">Univers féerique</option>
+        </select>
+      </div>
+
+      <br />
+
+      <div>
+        <label>Image :</label>
+        <input type="file" id="image" name="image" accept="image/*" />
+      </div>
+
+      <br />
+
+      <button type="submit">Envoyer</button>
+    </form>
+
+    <div id="status" style="margin-top:10px; font-style:italic; color:gray;"></div>
+    <pre id="result"></pre>
+    <div id="images" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;"></div>
+
+    <script>
+      const form = document.getElementById("testForm");
+      const result = document.getElementById("result");
+      const imagesDiv = document.getElementById("images");
+      const status = document.getElementById("status");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        imagesDiv.innerHTML = "";
+        result.textContent = "";
+        status.textContent = "Génération en cours... (30-60 secondes)";
+
+        const formData = new FormData();
+        formData.append("theme", document.getElementById("theme").value);
+        formData.append("images", document.getElementById("image").files[0]);
+
+        try {
+          const response = await fetch("http://localhost:5000/api/ai/generate", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+          status.textContent = data.message || "";
+
+          if (data.generatedImages && data.generatedImages.length > 0) {
+            data.generatedImages.forEach((src) => {
+              const img = document.createElement("img");
+              img.src = src;
+              img.style = "width:300px; height:300px; object-fit:cover; border-radius:8px;";
+              imagesDiv.appendChild(img);
+            });
+          } else {
+            result.textContent = JSON.stringify(data, null, 2);
+          }
+        } catch (error) {
+          status.textContent = "";
+          result.textContent = "Erreur : " + error.message;
+        }
+      });
+    </script>
+  </body>
+</html>

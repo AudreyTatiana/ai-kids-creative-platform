@@ -1,10 +1,52 @@
 import Layout from "../components/Layout";
 import Container from "../components/Container";
 import Navbar from "../components/Navbar";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAI } from "../context/AIContext";
+
+const PRICES: Record<string, number> = {
+  "Pack d'images": 29.9,
+  "Album Photo": 49.9,
+  "Histoire personnalisée": 39.9,
+};
 
 function PaymentPage() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { project } = useAI();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const basePrice = PRICES[project.product] ?? 29.9;
+  const fee = project.delivery === "physical" ? 5.9 : 0;
+  const total = basePrice + fee;
+  const fmt = (n: number) => n.toFixed(2).replace(".", ",") + "€";
+
+  const handlePay = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("http://localhost:5000/api/payment/create-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          product: project.product,
+          theme: project.theme,
+          delivery: project.delivery,
+          amount: total,
+          customer: project.customer,
+          generatedImages: project.generatedImages,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Erreur Stripe.");
+      window.location.href = data.url; // Redirection vers Stripe
+    } catch (err: any) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <Layout>
       <Navbar />
@@ -168,11 +210,11 @@ function PaymentPage() {
                   </h2>
 
                   <div style={{ display: "grid", gap: "14px" }}>
-                    <SummaryRow label="Produit" value="Pack d'images" />
-                    <SummaryRow label="Thème" value="Conte" />
-                    <SummaryRow label="Livraison" value="Par email" />
-                    <SummaryRow label="Sous-total" value="29,90€" />
-                    <SummaryRow label="Frais" value="0,00€" />
+                    <SummaryRow label="Produit" value={project.product || "Pack d'images"} />
+                    <SummaryRow label="Thème" value={project.theme || "Conte"} />
+                    <SummaryRow label="Livraison" value={project.delivery === "email" ? "Par email" : "À domicile"} />
+                    <SummaryRow label="Sous-total" value={fmt(basePrice)} />
+                    <SummaryRow label="Frais" value={fmt(fee)} />
                   </div>
 
                   <div
@@ -202,27 +244,29 @@ function PaymentPage() {
                         fontWeight: 800,
                       }}
                     >
-                      29,90€
+                      {fmt(total)}
                     </span>
                   </div>
 
+                  {error && <p style={{ color: "#e74c3c", fontSize: "14px", fontWeight: 600, marginTop: "12px" }}>{error}</p>}
                   <button
-                    onClick={() => navigate("/confirmation")}
+                    onClick={handlePay}
+                    disabled={loading}
                     style={{
-                    width: "100%",
-                    marginTop: "22px",
-                    background: "#f6b93b",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "14px",
-                    padding: "14px 18px",
-                    fontSize: "15px",
-                    fontWeight: 700,
-                    cursor: "pointer",
+                      width: "100%",
+                      marginTop: "22px",
+                      background: loading ? "#ccc" : "#f6b93b",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "14px",
+                      padding: "14px 18px",
+                      fontSize: "15px",
+                      fontWeight: 700,
+                      cursor: loading ? "not-allowed" : "pointer",
                     }}
-                >
-                    Payer en toute sécurité
-                 </button>
+                  >
+                    {loading ? "Redirection vers Stripe..." : "Payer en toute sécurité"}
+                  </button>
                 </div>
 
                 <div

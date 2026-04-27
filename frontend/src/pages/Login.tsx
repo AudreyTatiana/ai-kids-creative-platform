@@ -41,6 +41,9 @@ function Login() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
+      // Notifier CartContext (même onglet)
+      window.dispatchEvent(new Event("user-logged-in"));
+
       setSuccess("Connexion réussie 🎉");
 
       // ✅ redirection après 1.5s

@@ -1,9 +1,60 @@
+import { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import Container from "../components/Container";
 import Navbar from "../components/Navbar";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+
+interface OrderData {
+  orderNumber: string;
+  product: string;
+  theme: string;
+  delivery: string;
+  amount: number;
+  email: string;
+}
 
 function ConfirmationPage() {
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get("session_id");
+  const [order, setOrder] = useState<OrderData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fmt = (n: number) => n.toFixed(2).replace(".", ",") + "€";
+
+  useEffect(() => {
+    if (!sessionId) { setError("Session introuvable."); setLoading(false); return; }
+    let cancelled = false;
+    fetch(`http://localhost:5000/api/payment/confirm/${sessionId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data.orderNumber) setOrder(data);
+        else setError(data.message || "Erreur de confirmation.");
+      })
+      .catch(() => { if (!cancelled) setError("Erreur réseau."); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [sessionId]);
+  if (loading) return (
+    <Layout><Navbar />
+      <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(180deg, #fbf9ff 0%, #f3f0fb 100%)" }}>
+        <p style={{ color: "#7a7699", fontSize: "18px" }}>Confirmation de votre commande...</p>
+      </section>
+    </Layout>
+  );
+
+  if (error) return (
+    <Layout><Navbar />
+      <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(180deg, #fbf9ff 0%, #f3f0fb 100%)" }}>
+        <div style={{ textAlign: "center" }}>
+          <p style={{ color: "#e74c3c", fontSize: "16px", marginBottom: "16px" }}>{error}</p>
+          <Link to="/home" style={{ color: "#6f8fff" }}>Retour à l'accueil</Link>
+        </div>
+      </section>
+    </Layout>
+  );
+
   return (
     <Layout>
       <Navbar />
@@ -92,22 +143,10 @@ function ConfirmationPage() {
                 marginBottom: "28px",
               }}
             >
-              <InfoCard
-                title="Numéro de commande"
-                value="#PR-2026-00128"
-              />
-              <InfoCard
-                title="Mode de livraison"
-                value="Version électronique par email"
-              />
-              <InfoCard
-                title="Produit"
-                value="Pack d'images"
-              />
-              <InfoCard
-                title="Montant payé"
-                value="29,90€"
-              />
+              <InfoCard title="Numéro de commande" value={order ? `#${order.orderNumber}` : "—"} />
+              <InfoCard title="Mode de livraison" value={order?.delivery === "email" ? "Version électronique par email" : "Livraison à domicile"} />
+              <InfoCard title="Produit" value={order?.product || "—"} />
+              <InfoCard title="Montant payé" value={order ? fmt(order.amount) : "—"} />
             </div>
 
             <div
@@ -151,7 +190,7 @@ function ConfirmationPage() {
                 Voir mon compte
               </Link>
 
-              <Link to="/" style={secondaryLinkStyle}>
+              <Link to="/home" style={secondaryLinkStyle}>
                 Retour à l’accueil
               </Link>
             </div>

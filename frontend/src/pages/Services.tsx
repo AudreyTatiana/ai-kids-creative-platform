@@ -2,9 +2,11 @@ import Layout from "../components/Layout";
 import Container from "../components/Container";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 
 function Services() {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   const services = [
     {
@@ -110,12 +112,12 @@ function Services() {
               gap: "24px",
             }}
           >
-            <ServiceCard {...services[0]} />
-            <ServiceCard {...services[1]} />
-            <ServiceCard {...services[2]} />
+            <ServiceCard {...services[0]} onAddToCart={addToCart} />
+            <ServiceCard {...services[1]} onAddToCart={addToCart} />
+            <ServiceCard {...services[2]} onAddToCart={addToCart} />
 
             <div style={{ gridColumn: "2 / 3" }}>
-              <ServiceCard {...services[3]} />
+              <ServiceCard {...services[3]} onAddToCart={addToCart} />
             </div>
           </div>
         </Container>
@@ -131,6 +133,7 @@ type ServiceCardProps = {
   badge: string;
   button: string;
   action: () => void;
+  onAddToCart: () => void;
 };
 
 function ServiceCard({
@@ -140,6 +143,7 @@ function ServiceCard({
   badge,
   button,
   action,
+  onAddToCart,
 }: ServiceCardProps) {
   return (
     <div
@@ -220,7 +224,14 @@ function ServiceCard({
           {badge}
         </div>
 
-        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "10px",
+            flexWrap: "wrap",
+          }}
+        >
           <button
             onClick={action}
             style={{
@@ -235,6 +246,22 @@ function ServiceCard({
             }}
           >
             {button}
+          </button>
+
+          <button
+            onClick={onAddToCart}
+            style={{
+              background: "#f8f4ff",
+              color: "#6d67a0",
+              border: "1px solid #e7ddfb",
+              borderRadius: "999px",
+              padding: "10px 16px",
+              fontSize: "14px",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            Ajouter
           </button>
         </div>
       </div>
