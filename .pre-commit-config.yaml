@@ -1,0 +1,28 @@
+repos:
+  # Hooks de base : qualité et sécurité du code
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace        # Supprime les espaces en fin de ligne
+      - id: end-of-file-fixer          # Assure une ligne vide en fin de fichier
+      - id: check-merge-conflict       # Détecte les marqueurs de conflit non résolus
+      - id: check-added-large-files    # Bloque les fichiers > 500KB
+        args: ["--maxkb=500"]
+      - id: detect-private-key         # Bloque les clés privées commitées
+      - id: check-json                 # Vérifie la syntaxe JSON
+      - id: check-yaml                 # Vérifie la syntaxe YAML
+
+  # Validation des Conventional Commits
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v3.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args:
+          - feat
+          - fix
+          - chore
+          - docs
+          - refactor
+          - test
+          - style
