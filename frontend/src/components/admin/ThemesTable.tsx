@@ -1,123 +1,96 @@
+import { useEffect, useState } from "react";
+import { fetchAllProducts } from "../../api/products";
+import { fetchAllThemes } from "../../api/themes";
+import "../admin/AdminTable.css";
+
+interface CatalogItem {
+  id: number;
+  name: string;
+  category: string;
+  status: string;
+  type: "Produit" | "Thème";
+}
+
 function TableHeader({ children }: { children: React.ReactNode }) {
-  return (
-    <th
-      style={{
-        textAlign: "left",
-        padding: "14px 16px",
-        color: "#6d67a0",
-        fontSize: "14px",
-        fontWeight: 800,
-        borderBottom: "1px solid #eee8fb",
-      }}
-    >
-      {children}
-    </th>
-  );
+  return <th className="admin-table__th">{children}</th>;
 }
 
 function TableCell({ children }: { children: React.ReactNode }) {
-  return (
-    <td
-      style={{
-        padding: "14px 16px",
-        color: "#4f4a76",
-        fontSize: "15px",
-        borderBottom: "1px solid #f2eefb",
-      }}
-    >
-      {children}
-    </td>
-  );
+  return <td className="admin-table__td">{children}</td>;
 }
 
 function StatusBadge({ status }: { status: string }) {
   return (
-    <span
-      style={{
-        display: "inline-block",
-        padding: "6px 12px",
-        borderRadius: "999px",
-        background: "#ebfff1",
-        color: "#1f9d57",
-        fontSize: "13px",
-        fontWeight: 700,
-      }}
-    >
+    <span className={status === "Actif" ? "badge badge--active" : "badge badge--default"}>
       {status}
     </span>
   );
 }
 
-const tableButtonStyle: React.CSSProperties = {
-  background: "#fff",
-  color: "#6d67a0",
-  border: "1px solid #ddd4f2",
-  borderRadius: "999px",
-  padding: "8px 14px",
-  fontSize: "13px",
-  fontWeight: 700,
-  cursor: "pointer",
-};
-
 function ThemesTable() {
-  const catalog = [
-    { name: "Pack d'images", category: "Produit", status: "Actif" },
-    { name: "Album Photo", category: "Produit", status: "Actif" },
-    { name: "Conte", category: "Thème", status: "Actif" },
-    { name: "Super-héros", category: "Thème", status: "Actif" },
-  ];
+  const [items, setItems] = useState<CatalogItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    Promise.all([fetchAllProducts(), fetchAllThemes()])
+      .then(([products, themes]) => {
+        const productItems: CatalogItem[] = (Array.isArray(products) ? products : []).map(
+          (p: { id: number; name: string; category: string; status: string }) => ({
+            id: p.id,
+            name: p.name,
+            category: p.category,
+            status: p.status,
+            type: "Produit",
+          })
+        );
+        const themeItems: CatalogItem[] = (Array.isArray(themes) ? themes : []).map(
+          (t: { id: number; name: string; category: string; status: string }) => ({
+            id: t.id,
+            name: t.name,
+            category: t.category,
+            status: t.status,
+            type: "Thème",
+          })
+        );
+        setItems([...productItems, ...themeItems].slice(0, 6));
+      })
+      .catch(() => setItems([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <section
-      style={{
-        background: "#ffffff",
-        borderRadius: "24px",
-        padding: "24px",
-        boxShadow: "0 18px 40px rgba(117, 100, 170, 0.10)",
-        border: "1px solid #efe9fb",
-      }}
-    >
-      <h3
-        style={{
-          margin: "0 0 18px",
-          color: "#3d3a6d",
-          fontSize: "24px",
-          fontWeight: 800,
-        }}
-      >
-        Gestion des thèmes & produits
+    <section className="admin-table-section">
+      <h3 className="admin-table-section__title admin-table-section__title--mb">
+        Gestion des thèmes &amp; produits
       </h3>
 
-      <div style={{ overflowX: "auto" }}>
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-          }}
-        >
-          <thead>
-            <tr style={{ background: "#faf8ff" }}>
-              <TableHeader>Nom</TableHeader>
-              <TableHeader>Catégorie</TableHeader>
-              <TableHeader>Statut</TableHeader>
-              <TableHeader>Action</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {catalog.map((item) => (
-              <tr key={`${item.name}-${item.category}`}>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.category}</TableCell>
-                <TableCell>
-                  <StatusBadge status={item.status} />
-                </TableCell>
-                <TableCell>
-                  <button style={tableButtonStyle}>Modifier</button>
-                </TableCell>
+      <div className="admin-table-wrapper">
+        {loading ? (
+          <p className="admin-page__status-msg">Chargement...</p>
+        ) : items.length === 0 ? (
+          <p className="admin-page__status-msg">Aucun produit ou thème enregistré.</p>
+        ) : (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <TableHeader>Nom</TableHeader>
+                <TableHeader>Type</TableHeader>
+                <TableHeader>Catégorie</TableHeader>
+                <TableHeader>Statut</TableHeader>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={`${item.type}-${item.id}`}>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.type}</TableCell>
+                  <TableCell>{item.category}</TableCell>
+                  <TableCell><StatusBadge status={item.status} /></TableCell>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </section>
   );

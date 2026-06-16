@@ -1,0 +1,18 @@
+.app-navbar {
+  background: var(--bg-white);
+  padding: 18px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.app-navbar__title {
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.app-navbar__links {
+  display: flex;
+  gap: 28px;
+}

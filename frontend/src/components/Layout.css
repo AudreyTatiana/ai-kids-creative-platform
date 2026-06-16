@@ -1,0 +1,4 @@
+.layout {
+  background: var(--bg-page-alt);
+  min-height: 100vh;
+}

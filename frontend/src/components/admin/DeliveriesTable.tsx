@@ -1,162 +1,83 @@
+import { useEffect, useState } from "react";
+import { fetchPhysicalOrders } from "../../api/orders";
+import "../admin/AdminTable.css";
+
+interface Order {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  product: string;
+  status: string;
+}
+
 function TableHeader({ children }: { children: React.ReactNode }) {
-  return (
-    <th
-      style={{
-        textAlign: "left",
-        padding: "14px 16px",
-        color: "#6d67a0",
-        fontSize: "14px",
-        fontWeight: 800,
-        borderBottom: "1px solid #eee8fb",
-      }}
-    >
-      {children}
-    </th>
-  );
+  return <th className="admin-table__th">{children}</th>;
 }
 
 function TableCell({ children }: { children: React.ReactNode }) {
-  return (
-    <td
-      style={{
-        padding: "14px 16px",
-        color: "#4f4a76",
-        fontSize: "15px",
-        borderBottom: "1px solid #f2eefb",
-      }}
-    >
-      {children}
-    </td>
-  );
+  return <td className="admin-table__td">{children}</td>;
 }
 
 function DeliveryStatusBadge({ status }: { status: string }) {
-  let background = "#eef5ff";
-  let color = "#3973d6";
-
-  if (status === "En préparation") {
-    background = "#fff7e8";
-    color = "#d48a00";
-  }
-
-  if (status === "Expédiée") {
-    background = "#eef5ff";
-    color = "#3973d6";
-  }
-
-  if (status === "Livrée") {
-    background = "#ebfff1";
-    color = "#1f9d57";
-  }
-
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        padding: "6px 12px",
-        borderRadius: "999px",
-        background,
-        color,
-        fontSize: "13px",
-        fontWeight: 700,
-      }}
-    >
-      {status}
-    </span>
-  );
+  const map: Record<string, string> = {
+    paid:       "badge badge--paid",
+    pending:    "badge badge--pending",
+    processing: "badge badge--inprogress",
+    cancelled:  "badge badge--default",
+  };
+  const labels: Record<string, string> = {
+    paid: "Payée", pending: "En attente", processing: "En cours", cancelled: "Annulée",
+  };
+  return <span className={map[status] ?? "badge badge--default"}>{labels[status] ?? status}</span>;
 }
 
-const tableButtonStyle: React.CSSProperties = {
-  background: "#fff",
-  color: "#6d67a0",
-  border: "1px solid #ddd4f2",
-  borderRadius: "999px",
-  padding: "8px 14px",
-  fontSize: "13px",
-  fontWeight: 700,
-  cursor: "pointer",
-};
-
 function DeliveriesTable() {
-  const deliveries = [
-    {
-      customer: "Sophie Martin",
-      address: "14 rue Victor Hugo, Paris",
-      product: "Album Photo",
-      tracking: "TRK-45891",
-      status: "Expédiée",
-    },
-    {
-      customer: "Nadia Benali",
-      address: "22 avenue de la Gare, Lyon",
-      product: "Histoire personnalisée",
-      tracking: "TRK-45892",
-      status: "En préparation",
-    },
-    {
-      customer: "Julie Bernard",
-      address: "8 rue des Fleurs, Lille",
-      product: "Album Photo",
-      tracking: "TRK-45877",
-      status: "Livrée",
-    },
-  ];
+  const [deliveries, setDeliveries] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPhysicalOrders()
+      .then((data) => setDeliveries(Array.isArray(data) ? data.slice(0, 5) : []))
+      .catch(() => setDeliveries([]))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <section
-      style={{
-        background: "#ffffff",
-        borderRadius: "24px",
-        padding: "24px",
-        boxShadow: "0 18px 40px rgba(117, 100, 170, 0.10)",
-        border: "1px solid #efe9fb",
-      }}
-    >
-      <h3
-        style={{
-          margin: "0 0 18px",
-          color: "#3d3a6d",
-          fontSize: "24px",
-          fontWeight: 800,
-        }}
-      >
+    <section className="admin-table-section">
+      <h3 className="admin-table-section__title admin-table-section__title--mb">
         Suivi des livraisons à domicile
       </h3>
 
-      <div style={{ overflowX: "auto" }}>
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-          }}
-        >
-          <thead>
-            <tr style={{ background: "#faf8ff" }}>
-              <TableHeader>Client</TableHeader>
-              <TableHeader>Adresse</TableHeader>
-              <TableHeader>Produit</TableHeader>
-              <TableHeader>Suivi</TableHeader>
-              <TableHeader>Statut livraison</TableHeader>
-              <TableHeader>Action</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {deliveries.map((delivery) => (
-              <tr key={`${delivery.customer}-${delivery.tracking}`}>
-                <TableCell>{delivery.customer}</TableCell>
-                <TableCell>{delivery.address}</TableCell>
-                <TableCell>{delivery.product}</TableCell>
-                <TableCell>{delivery.tracking}</TableCell>
-                <TableCell>
-                  <DeliveryStatusBadge status={delivery.status} />
-                </TableCell>
-                <TableCell>
-                  <button style={tableButtonStyle}>Mettre à jour</button>
-                </TableCell>
+      <div className="admin-table-wrapper">
+        {loading ? (
+          <p className="admin-page__status-msg">Chargement...</p>
+        ) : deliveries.length === 0 ? (
+          <p className="admin-page__status-msg">Aucune livraison physique pour le moment.</p>
+        ) : (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <TableHeader>Client</TableHeader>
+                <TableHeader>Email</TableHeader>
+                <TableHeader>Produit</TableHeader>
+                <TableHeader>Statut paiement</TableHeader>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {deliveries.map((order) => (
+                <tr key={order.id}>
+                  <TableCell>{order.first_name} {order.last_name}</TableCell>
+                  <TableCell>
+                    <span className="admin-table__email-sub">{order.email}</span>
+                  </TableCell>
+                  <TableCell>{order.product}</TableCell>
+                  <TableCell><DeliveryStatusBadge status={order.status} /></TableCell>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </section>
   );

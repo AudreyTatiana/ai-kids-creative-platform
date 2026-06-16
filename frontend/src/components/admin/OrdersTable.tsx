@@ -1,213 +1,95 @@
+import { useEffect, useState } from "react";
+import { fetchAllOrders } from "../../api/orders";
+import "../admin/AdminTable.css";
+
+interface Order {
+  id: number;
+  first_name: string;
+  last_name: string;
+  product: string;
+  delivery: string;
+  status: string;
+  amount: number;
+}
+
 function TableHeader({ children }: { children: React.ReactNode }) {
-  return (
-    <th
-      style={{
-        textAlign: "left",
-        padding: "14px 16px",
-        color: "#6d67a0",
-        fontSize: "14px",
-        fontWeight: 800,
-        borderBottom: "1px solid #eee8fb",
-      }}
-    >
-      {children}
-    </th>
-  );
+  return <th className="admin-table__th">{children}</th>;
 }
 
 function TableCell({ children }: { children: React.ReactNode }) {
-  return (
-    <td
-      style={{
-        padding: "14px 16px",
-        color: "#4f4a76",
-        fontSize: "15px",
-        borderBottom: "1px solid #f2eefb",
-      }}
-    >
-      {children}
-    </td>
-  );
+  return <td className="admin-table__td">{children}</td>;
 }
 
 function StatusBadge({ status }: { status: string }) {
-  let background = "#eef1ff";
-  let color = "#5d6fe4";
-
-  if (status === "Payée") {
-    background = "#ebfff1";
-    color = "#1f9d57";
-  }
-
-  if (status === "En attente") {
-    background = "#fff7e8";
-    color = "#d48a00";
-  }
-
-  if (status === "En cours") {
-    background = "#eef5ff";
-    color = "#3973d6";
-  }
-
-  return (
-    <span
-      style={{
-        display: "inline-block",
-        padding: "6px 12px",
-        borderRadius: "999px",
-        background,
-        color,
-        fontSize: "13px",
-        fontWeight: 700,
-      }}
-    >
-      {status}
-    </span>
-  );
+  const map: Record<string, string> = {
+    paid:       "badge badge--paid",
+    pending:    "badge badge--pending",
+    processing: "badge badge--inprogress",
+    cancelled:  "badge badge--default",
+  };
+  const labels: Record<string, string> = {
+    paid: "Payée", pending: "En attente", processing: "En cours", cancelled: "Annulée",
+  };
+  return <span className={map[status] ?? "badge badge--default"}>{labels[status] ?? status}</span>;
 }
 
 function DeliveryBadge({ mode }: { mode: string }) {
-  const isHome = mode === "Domicile";
-
+  const isHome = mode !== "email";
   return (
-    <span
-      style={{
-        display: "inline-block",
-        padding: "6px 12px",
-        borderRadius: "999px",
-        background: isHome ? "#fff1f1" : "#eef5ff",
-        color: isHome ? "#c0392b" : "#3973d6",
-        fontSize: "13px",
-        fontWeight: 700,
-      }}
-    >
-      {mode}
+    <span className={isHome ? "badge delivery-badge--home" : "badge delivery-badge--email"}>
+      {isHome ? "Domicile" : "Email"}
     </span>
   );
 }
 
-const tableButtonStyle: React.CSSProperties = {
-  background: "#fff",
-  color: "#6d67a0",
-  border: "1px solid #ddd4f2",
-  borderRadius: "999px",
-  padding: "8px 14px",
-  fontSize: "13px",
-  fontWeight: 700,
-  cursor: "pointer",
-};
-
 function OrdersTable() {
-  const orders = [
-    {
-      customer: "Marie Dupont",
-      product: "Pack d'images",
-      delivery: "Email",
-      status: "En attente",
-      amount: "29,90€",
-      action: "Détails",
-    },
-    {
-      customer: "Sophie Martin",
-      product: "Album Photo",
-      delivery: "Domicile",
-      status: "Payée",
-      amount: "49,90€",
-      action: "Voir",
-    },
-    {
-      customer: "Nadia Benali",
-      product: "Histoire personnalisée",
-      delivery: "Domicile",
-      status: "En cours",
-      amount: "39,90€",
-      action: "Suivre",
-    },
-  ];
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchAllOrders()
+      .then((data) => setOrders(Array.isArray(data) ? data.slice(0, 5) : []))
+      .catch(() => setOrders([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const fmt = (n: number) => Number(n).toFixed(2).replace(".", ",") + "€";
 
   return (
-    <section
-      style={{
-        background: "#ffffff",
-        borderRadius: "24px",
-        padding: "24px",
-        boxShadow: "0 18px 40px rgba(117, 100, 170, 0.10)",
-        border: "1px solid #efe9fb",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "18px",
-          gap: "12px",
-          flexWrap: "wrap",
-        }}
-      >
-        <h3
-          style={{
-            margin: 0,
-            color: "#3d3a6d",
-            fontSize: "24px",
-            fontWeight: 800,
-          }}
-        >
-          Commandes
-        </h3>
-
-        <button
-          style={{
-            background: "#fff",
-            color: "#6d67a0",
-            border: "1px solid #ddd4f2",
-            borderRadius: "14px",
-            padding: "10px 16px",
-            fontSize: "14px",
-            fontWeight: 700,
-            cursor: "pointer",
-          }}
-        >
-          Télécharger
-        </button>
+    <section className="admin-table-section">
+      <div className="admin-table-section__header">
+        <h3 className="admin-table-section__title">Dernières commandes</h3>
       </div>
 
-      <div style={{ overflowX: "auto" }}>
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-          }}
-        >
-          <thead>
-            <tr style={{ background: "#faf8ff" }}>
-              <TableHeader>Client</TableHeader>
-              <TableHeader>Produit</TableHeader>
-              <TableHeader>Livraison</TableHeader>
-              <TableHeader>Statut</TableHeader>
-              <TableHeader>Montant</TableHeader>
-              <TableHeader>Action</TableHeader>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order) => (
-              <tr key={`${order.customer}-${order.product}`}>
-                <TableCell>{order.customer}</TableCell>
-                <TableCell>{order.product}</TableCell>
-                <TableCell>
-                  <DeliveryBadge mode={order.delivery} />
-                </TableCell>
-                <TableCell>
-                  <StatusBadge status={order.status} />
-                </TableCell>
-                <TableCell>{order.amount}</TableCell>
-                <TableCell>
-                  <button style={tableButtonStyle}>{order.action}</button>
-                </TableCell>
+      <div className="admin-table-wrapper">
+        {loading ? (
+          <p className="admin-page__status-msg">Chargement...</p>
+        ) : orders.length === 0 ? (
+          <p className="admin-page__status-msg">Aucune commande pour le moment.</p>
+        ) : (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <TableHeader>Client</TableHeader>
+                <TableHeader>Produit</TableHeader>
+                <TableHeader>Livraison</TableHeader>
+                <TableHeader>Statut</TableHeader>
+                <TableHeader>Montant</TableHeader>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr key={order.id}>
+                  <TableCell>{order.first_name} {order.last_name}</TableCell>
+                  <TableCell>{order.product}</TableCell>
+                  <TableCell><DeliveryBadge mode={order.delivery} /></TableCell>
+                  <TableCell><StatusBadge status={order.status} /></TableCell>
+                  <TableCell>{fmt(order.amount)}</TableCell>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </section>
   );

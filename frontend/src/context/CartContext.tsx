@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
+import { fetchCart, addCartItem, removeCartItem, clearCartItems } from "../api/cart";
 
 export interface CartItem {
   _id: string;
@@ -15,6 +16,7 @@ type CartContextType = {
   cartCount: number;
   addToCart: (item: Omit<CartItem, "_id">) => Promise<boolean>;
   removeFromCart: (itemId: string) => Promise<void>;
+  clearCart: () => Promise<void>;
   loadCart: () => Promise<void>;
 };
 
@@ -26,8 +28,6 @@ function getUserId(): number | null {
   return JSON.parse(user).id || null;
 }
 
-const API = "http://localhost:5000/api/cart";
-
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
@@ -35,9 +35,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const userId = getUserId();
     if (!userId) { console.warn("Cart: utilisateur non connecté"); return; }
     try {
-      const res = await fetch(`${API}/${userId}`);
+      const { res, data } = await fetchCart(userId);
       if (!res.ok) { console.error("Cart: erreur HTTP", res.status); return; }
-      const data = await res.json();
       console.log("Cart chargé:", data);
       setCartItems(data.items || []);
     } catch (err) { console.error("Erreur loadCart:", err); }
@@ -64,17 +63,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return false;
     }
     try {
-      const res = await fetch(`${API}/${userId}/add`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(item),
-      });
+      const { res, data } = await addCartItem(userId, item);
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        console.error("Cart: erreur addToCart", res.status, err);
+        console.error("Cart: erreur addToCart", res.status, data);
         return false;
       }
-      const data = await res.json();
       console.log("Article ajouté au panier:", data);
       setCartItems(data.items || []);
       return true;
@@ -88,20 +81,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const userId = getUserId();
     if (!userId) return;
     try {
-      const res = await fetch(`${API}/${userId}/item/${itemId}`, { method: "DELETE" });
-      if (!res.ok) {
-        console.error("Cart: erreur removeFromCart", res.status);
-        return;
-      }
-      const data = await res.json();
+      const { res, data } = await removeCartItem(userId, itemId);
+      if (!res.ok) { console.error("Cart: erreur removeFromCart", res.status); return; }
       setCartItems(data.items || []);
     } catch (err) {
       console.error("Cart: erreur réseau removeFromCart", err);
     }
   };
 
+  const clearCart = async () => {
+    const userId = getUserId();
+    if (!userId) return;
+    try {
+      const { res } = await clearCartItems(userId);
+      if (!res.ok) { console.error("Cart: erreur clearCart", res.status); return; }
+      setCartItems([]);
+    } catch (err) {
+      console.error("Cart: erreur réseau clearCart", err);
+    }
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, cartCount: cartItems.length, addToCart, removeFromCart, loadCart }}>
+    <CartContext.Provider value={{ cartItems, cartCount: cartItems.length, addToCart, removeFromCart, clearCart, loadCart }}>
       {children}
     </CartContext.Provider>
   );

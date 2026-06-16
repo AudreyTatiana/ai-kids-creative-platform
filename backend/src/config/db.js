@@ -13,6 +13,15 @@ db.connect((err) => {
     process.exit(1);
   }
   console.log("Connecté à la base de données MySQL.");
+
+  // Migrations colonnes users
+  db.query("ALTER TABLE users ADD COLUMN reset_token VARCHAR(255) DEFAULT NULL", (err) => {
+    if (err && err.code !== "ER_DUP_FIELDNAME") console.error("Migration reset_token:", err.message);
+  });
+  db.query("ALTER TABLE users ADD COLUMN reset_token_expires DATETIME DEFAULT NULL", (err) => {
+    if (err && err.code !== "ER_DUP_FIELDNAME") console.error("Migration reset_token_expires:", err.message);
+  });
+
 });
 
 module.exports = db;

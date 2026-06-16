@@ -1,0 +1,4 @@
+.home {
+  background-color: var(--bg-section);
+  min-height: 100vh;
+}

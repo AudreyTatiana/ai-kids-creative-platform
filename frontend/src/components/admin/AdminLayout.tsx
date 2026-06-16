@@ -1,4 +1,5 @@
 import Sidebar from "./Sidebar";
+import "./AdminLayout.css";
 
 type Props = {
   children: React.ReactNode;
@@ -6,23 +7,10 @@ type Props = {
 
 function AdminLayout({ children }: Props) {
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        width: "100%",
-        background: "linear-gradient(180deg, #f8f5ff 0%, #f3f7ff 100%)",
-      }}
-    >
+    <div className="admin-layout">
       <Sidebar />
 
-      <main
-        style={{
-          flex: 1,
-          padding: "32px",
-          boxSizing: "border-box",
-        }}
-      >
+      <main className="admin-layout__main">
         {children}
       </main>
     </div>

@@ -1,18 +1,38 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Layout from "../components/Layout";
 import Container from "../components/Container";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../api/auth";
+import "./Register.css";
 
 function Register() {
+  const navigate = useNavigate();
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null);
+
+  // Compte à rebours + redirection après inscription réussie
+  useEffect(() => {
+    if (countdown === null) return;
+    if (countdown === 0) {
+      navigate("/login");
+      return;
+    }
+    const timer = setTimeout(() => setCountdown((c) => (c !== null ? c - 1 : null)), 1000);
+    return () => clearTimeout(timer);
+  }, [countdown, navigate]);
 
   const checks = useMemo(
     () => ({
@@ -31,6 +51,8 @@ function Register() {
     checks.uppercase &&
     checks.number &&
     checks.symbol;
+
+  const canSubmit = isPasswordValid && acceptedTerms;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,35 +80,17 @@ function Register() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:5000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          password,
-        }),
-      });
-
-      const data = await response.json();
+      const { res: response, data } = await registerUser({ firstName, lastName, email, password });
 
       if (!response.ok) {
         setErrorMessage(data.message || "Une erreur est survenue.");
         return;
       }
 
-      setSuccessMessage("Inscription réussie avec succès.");
+      setSuccessMessage("Inscription réussie !");
       setErrorMessage("");
-
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-    } catch (error) {
+      setCountdown(3);
+    } catch {
       setErrorMessage("Impossible de contacter le serveur.");
       setSuccessMessage("");
     } finally {
@@ -96,91 +100,46 @@ function Register() {
 
   return (
     <Layout>
-      <section
-        style={{
-          minHeight: "100vh",
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          background: "linear-gradient(135deg, #f6f1ff 0%, #eef5ff 100%)",
-          padding: "40px 0",
-        }}
-      >
+      <section className="register-section">
         <Container>
-          <div
-            style={{
-              maxWidth: "760px",
-              width: "100%",
-              margin: "0 auto",
-              background: "#fff",
-              borderRadius: "28px",
-              padding: "42px",
-              boxShadow: "0 18px 40px rgba(117, 100, 170, 0.14)",
-            }}
-          >
-            <div style={{ textAlign: "center", marginBottom: "30px" }}>
-              <p
-                style={{
-                  margin: "0 0 10px",
-                  color: "#f6b93b",
-                  fontWeight: 700,
-                  fontSize: "14px",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.5px",
-                }}
-              >
-                Nouveau compte
-              </p>
-
-              <h1
-                style={{
-                  margin: "0 0 10px",
-                  fontSize: "38px",
-                  color: "#3d3a6d",
-                  fontWeight: 800,
-                }}
-              >
-                Inscription
-              </h1>
-
-              <p
-                style={{
-                  margin: 0,
-                  color: "#6a678f",
-                  fontSize: "16px",
-                  lineHeight: 1.7,
-                }}
-              >
+          <div className="register-card">
+            <div className="register-card__header">
+              <p className="section-badge">Nouveau compte</p>
+              <h1 className="register-card__title">Inscription</h1>
+              <p className="register-card__subtitle">
                 Créez votre compte pour lancer votre projet créatif personnalisé.
               </p>
             </div>
 
             {successMessage && (
-              <div style={successBoxStyle}>{successMessage}</div>
+              <div className="alert-success alert-success--mb">
+                {successMessage}
+              </div>
             )}
 
-            {errorMessage && <div style={errorBoxStyle}>{errorMessage}</div>}
+            {errorMessage && (
+              <div className="alert-error alert-error--mb">{errorMessage}</div>
+            )}
 
-            <form onSubmit={handleSubmit} style={{ display: "grid", gap: "18px" }}>
-              <div style={gridTwoCols}>
+            <form onSubmit={handleSubmit} className="register-form">
+              <div className="register-form__two-cols">
                 <div>
-                  <label style={labelStyle}>Prénom</label>
+                  <label className="form-label">Prénom</label>
                   <input
                     type="text"
                     placeholder="Votre prénom"
-                    style={inputStyle}
+                    className="form-input"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
 
                 <div>
-                  <label style={labelStyle}>Nom</label>
+                  <label className="form-label">Nom</label>
                   <input
                     type="text"
                     placeholder="Votre nom"
-                    style={inputStyle}
+                    className="form-input"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                   />
@@ -188,94 +147,100 @@ function Register() {
               </div>
 
               <div>
-                <label style={labelStyle}>Adresse email</label>
+                <label className="form-label">Adresse email</label>
                 <input
                   type="email"
                   placeholder="exemple@email.com"
-                  style={inputStyle}
+                  className="form-input"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
               <div>
-                <label style={labelStyle}>Mot de passe</label>
-                <input
-                  type="password"
-                  placeholder="Choisissez un mot de passe"
-                  style={inputStyle}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <label className="form-label">Mot de passe</label>
+                <div className="password-input-wrapper">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Choisissez un mot de passe"
+                    className="form-input"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="password-eye-btn"
+                    onClick={() => setShowPassword((v) => !v)}
+                    tabIndex={-1}
+                    aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  >
+                    {showPassword ? <EyeOffIcon /> : <EyeIcon />}
+                  </button>
+                </div>
 
-                <div
-                  style={{
-                    marginTop: "12px",
-                    background: "#faf8ff",
-                    border: "1px solid #eee8fb",
-                    borderRadius: "16px",
-                    padding: "14px 16px",
-                    display: "grid",
-                    gap: "8px",
-                  }}
-                >
-                  <PasswordRule
-                    valid={checks.length}
-                    text="Au moins 12 caractères"
-                  />
-                  <PasswordRule
-                    valid={checks.lowercase}
-                    text="Au moins une minuscule"
-                  />
-                  <PasswordRule
-                    valid={checks.uppercase}
-                    text="Au moins une majuscule"
-                  />
-                  <PasswordRule
-                    valid={checks.number}
-                    text="Au moins un chiffre"
-                  />
-                  <PasswordRule
-                    valid={checks.symbol}
-                    text="Au moins un symbole"
-                  />
+                <div className="password-rules">
+                  <PasswordRule valid={checks.length} text="Au moins 12 caractères" />
+                  <PasswordRule valid={checks.lowercase} text="Au moins une minuscule" />
+                  <PasswordRule valid={checks.uppercase} text="Au moins une majuscule" />
+                  <PasswordRule valid={checks.number} text="Au moins un chiffre" />
+                  <PasswordRule valid={checks.symbol} text="Au moins un symbole" />
                 </div>
               </div>
 
               <div>
-                <label style={labelStyle}>Confirmer le mot de passe</label>
-                <input
-                  type="password"
-                  placeholder="Confirmez votre mot de passe"
-                  style={inputStyle}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+                <label className="form-label">Confirmer le mot de passe</label>
+                <div className="password-input-wrapper">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirmez votre mot de passe"
+                    className="form-input"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="password-eye-btn"
+                    onClick={() => setShowConfirmPassword((v) => !v)}
+                    tabIndex={-1}
+                    aria-label={showConfirmPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  >
+                    {showConfirmPassword ? <EyeOffIcon /> : <EyeIcon />}
+                  </button>
+                </div>
               </div>
 
-              <button type="submit" style={registerButtonStyle} disabled={loading}>
+              <label className="register-form__terms">
+                <input
+                  type="checkbox"
+                  checked={acceptedTerms}
+                  onChange={(e) => setAcceptedTerms(e.target.checked)}
+                  className="register-form__terms-checkbox"
+                />
+                <span>
+                  J'accepte les{" "}
+                  <a href="/cgu" target="_blank" className="register-card__login-link">
+                    Conditions Générales d'Utilisation
+                  </a>{" "}
+                  et la{" "}
+                  <a href="/rgpd" target="_blank" className="register-card__login-link">
+                    Politique de confidentialité (RGPD)
+                  </a>
+                </span>
+              </label>
+
+              <button
+                type="submit"
+                className="register-form__submit-btn"
+                disabled={loading || !canSubmit}
+                title={!acceptedTerms ? "Veuillez accepter les CGU et la RGPD pour continuer" : undefined}
+              >
                 {loading ? "Création du compte..." : "Créer mon compte"}
               </button>
             </form>
 
-            <p
-              style={{
-                marginTop: "22px",
-                marginBottom: 0,
-                textAlign: "center",
-                color: "#6a678f",
-                fontSize: "15px",
-              }}
-            >
+            <p className="register-card__footer">
               Vous avez déjà un compte ?{" "}
-              <Link
-                to="/login"
-                style={{
-                  color: "#4f7cff",
-                  textDecoration: "none",
-                  fontWeight: 700,
-                }}
-              >
+              <Link to="/login" className="register-card__login-link">
                 Connectez-vous
               </Link>
             </p>
@@ -288,31 +253,8 @@ function Register() {
 
 function PasswordRule({ valid, text }: { valid: boolean; text: string }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-        color: valid ? "#1f9d57" : "#8f89b2",
-        fontSize: "14px",
-        fontWeight: 600,
-      }}
-    >
-      <span
-        style={{
-          width: "20px",
-          height: "20px",
-          borderRadius: "50%",
-          background: valid ? "#ebfff1" : "#f3f0fb",
-          color: valid ? "#1f9d57" : "#8f89b2",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "12px",
-          fontWeight: 700,
-          flexShrink: 0,
-        }}
-      >
+    <div className={valid ? "password-rule password-rule--valid" : "password-rule password-rule--invalid"}>
+      <span className={valid ? "password-rule__icon password-rule__icon--valid" : "password-rule__icon password-rule__icon--invalid"}>
         {valid ? "✓" : "•"}
       </span>
       {text}
@@ -320,65 +262,23 @@ function PasswordRule({ valid, text }: { valid: boolean; text: string }) {
   );
 }
 
-const labelStyle: React.CSSProperties = {
-  display: "block",
-  marginBottom: "8px",
-  color: "#3d3a6d",
-  fontWeight: 700,
-  fontSize: "15px",
-};
+function EyeIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
 
-const inputStyle: React.CSSProperties = {
-  width: "100%",
-  padding: "14px 16px",
-  borderRadius: "12px",
-  border: "1px solid #d9d4ee",
-  fontSize: "15px",
-  outline: "none",
-  boxSizing: "border-box",
-  background: "#fff",
-};
-
-const registerButtonStyle: React.CSSProperties = {
-  marginTop: "8px",
-  background: "#f6b93b",
-  color: "#fff",
-  border: "none",
-  borderRadius: "12px",
-  padding: "14px 18px",
-  fontSize: "16px",
-  fontWeight: 700,
-  cursor: "pointer",
-};
-
-const gridTwoCols: React.CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "1fr 1fr",
-  gap: "16px",
-};
-
-const successBoxStyle: React.CSSProperties = {
-  marginBottom: "18px",
-  padding: "14px 16px",
-  borderRadius: "14px",
-  background: "#ebfff1",
-  border: "1px solid #ccefd8",
-  color: "#1f9d57",
-  fontSize: "14px",
-  fontWeight: 700,
-  textAlign: "center",
-};
-
-const errorBoxStyle: React.CSSProperties = {
-  marginBottom: "18px",
-  padding: "14px 16px",
-  borderRadius: "14px",
-  background: "#fff1f1",
-  border: "1px solid #f1d0d0",
-  color: "#c0392b",
-  fontSize: "14px",
-  fontWeight: 700,
-  textAlign: "center",
-};
+function EyeOffIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <line x1="1" y1="1" x2="23" y2="23" />
+    </svg>
+  );
+}
 
 export default Register;

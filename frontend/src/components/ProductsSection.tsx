@@ -1,51 +1,40 @@
 import Container from "./Container";
-import productImage from "../assets/images/ui-pack.png";
+import "./ProductsSection.css";
+
+const products = [
+  {
+    title: "Pack d'images",
+    price: "29,90€",
+    description: "5 créations IA haute résolution livrées par email",
+    emoji: "📷",
+    gradient: "linear-gradient(135deg, #e8d5ff 0%, #a87fff 100%)",
+  },
+  {
+    title: "Album Photo",
+    price: "49,90€",
+    description: "Album imprimé 20×20 cm, livré à domicile sous 7 jours",
+    emoji: "📖",
+    gradient: "linear-gradient(135deg, #ffd5e8 0%, #ff8fbe 100%)",
+  },
+  {
+    title: "Histoire personnalisée",
+    price: "39,90€",
+    description: "Livre illustré avec votre enfant comme personnage principal",
+    emoji: "📚",
+    gradient: "linear-gradient(135deg, #d5f0ff 0%, #6ab8f0 100%)",
+  },
+];
 
 function ProductsSection() {
   return (
-    <section
-      style={{
-        padding: "70px 0",
-        background: "#fcfbff",
-      }}
-    >
+    <section className="products-section">
       <Container>
-        <h2
-          style={{
-            fontSize: "32px",
-            color: "#3d3a6d",
-            marginBottom: "40px",
-            fontWeight: 800,
-          }}
-        >
-          Nos Produits
-        </h2>
+        <h2 className="products-section__title">Nos Produits</h2>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "30px",
-          }}
-        >
-          <ProductCard
-            title="Pack d'images"
-            price="29,90€"
-            image={productImage}
-            position="left center"
-          />
-          <ProductCard
-            title="Album Photo"
-            price="49,90€"
-            image={productImage}
-            position="center center"
-          />
-          <ProductCard
-            title="Histoire personnalisée"
-            price="39,90€"
-            image={productImage}
-            position="right center"
-          />
+        <div className="products-section__grid">
+          {products.map((product) => (
+            <ProductCard key={product.title} {...product} />
+          ))}
         </div>
       </Container>
     </section>
@@ -55,60 +44,20 @@ function ProductsSection() {
 type ProductCardProps = {
   title: string;
   price: string;
-  image: string;
-  position: string;
+  description: string;
+  emoji: string;
+  gradient: string;
 };
 
-function ProductCard({
-  title,
-  price,
-  image,
-  position,
-}: ProductCardProps) {
+function ProductCard({ title, price, description, emoji, gradient }: ProductCardProps) {
   return (
-    <div
-      style={{
-        background: "#ffffff",
-        borderRadius: "18px",
-        padding: "20px",
-        textAlign: "center",
-        boxShadow: "0 10px 30px rgba(117, 100, 170, 0.12)",
-      }}
-    >
-      <img
-        src={image}
-        alt={title}
-        style={{
-          width: "100%",
-          height: "180px",
-          objectFit: "cover",
-          objectPosition: position,
-          borderRadius: "14px",
-          marginBottom: "15px",
-          display: "block",
-        }}
-      />
-
-      <h3
-        style={{
-          fontSize: "20px",
-          color: "#3d3a6d",
-          marginBottom: "8px",
-        }}
-      >
-        {title}
-      </h3>
-
-      <p
-        style={{
-          fontSize: "16px",
-          fontWeight: 700,
-          color: "#f6b93b",
-          margin: 0,
-        }}
-      >
-        {price}
-      </p>
+    <div className="product-card">
+      <div className="product-card__illustration" style={{ background: gradient }}>
+        <span className="product-card__emoji">{emoji}</span>
+      </div>
+      <h3 className="product-card__title">{title}</h3>
+      <p className="product-card__desc">{description}</p>
+      <p className="product-card__price">{price}</p>
     </div>
   );
 }

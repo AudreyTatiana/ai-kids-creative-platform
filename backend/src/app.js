@@ -8,6 +8,10 @@ const authRoutes = require("./routes/authRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const contactRoutes = require("./routes/contactRoutes");
+const productRoutes = require("./routes/productRoutes");
+const serviceRoutes = require("./routes/serviceRoutes");
+const themeRoutes = require("./routes/themeRoutes");
 
 connectMongo();
 
@@ -22,6 +26,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/contact", contactRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/services", serviceRoutes);
+app.use("/api/themes", themeRoutes);
 
 // Gestionnaire d'erreurs global — renvoie toujours du JSON
 app.use((err, req, res, next) => {

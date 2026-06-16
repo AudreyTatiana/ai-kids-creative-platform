@@ -4,6 +4,11 @@ const app = require("./src/app");
 
 const PORT = process.env.PORT || 5000;
 
+// Health check — requis pour le HEALTHCHECK Docker
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });
