@@ -22,12 +22,11 @@ permissions:
 
 jobs:
   # ─────────────────────────────────────────
-  # QUALITÉ DU CODE
+  # JOB 1 — BACKEND
   # ─────────────────────────────────────────
-  quality:
-    name: Qualité & Audit
+  backend:
+    name: Backend — install & audit
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
@@ -47,23 +46,38 @@ jobs:
         working-directory: backend
         run: npm audit --audit-level=high || true
 
+  # ─────────────────────────────────────────
+  # JOB 2 — FRONTEND
+  # ─────────────────────────────────────────
+  frontend:
+    name: Frontend — install & lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
       - name: Installation des dépendances frontend
         working-directory: frontend
         run: npm ci
 
-      - name: Lint frontend
+      - name: Lint du code frontend
         working-directory: frontend
         run: npm run lint || true
 
   # ─────────────────────────────────────────
-  # BUILD & PUBLICATION DOCKER
+  # JOB 3 — BUILD DOCKER
   # ─────────────────────────────────────────
   build:
     name: Build & Push Docker
     runs-on: ubuntu-latest
-    needs: quality
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev'
-
+    needs: [backend, frontend]
     steps:
       - name: Checkout du code
         uses: actions/checkout@v4
@@ -86,7 +100,6 @@ jobs:
           tags: |
             type=ref,event=branch
             type=sha,prefix=sha-
-            type=semver,pattern={{version}}
             type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
       - name: Build et push de l'image Docker
@@ -99,6 +112,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # ─────────────────────────────────────────
+  # JOB 4 — SCAN TRIVY
+  # ─────────────────────────────────────────
+  trivy:
+    name: Sécurité — Trivy scan
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
       - name: Scan Trivy — vulnérabilités image
         uses: aquasecurity/trivy-action@v0.36.0
         with:
