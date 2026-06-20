@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "jest --testPathPattern=tests/ --forceExit --detectOpenHandles"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +37,8 @@
     "stripe": "^22.0.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "jest": "^30.4.2",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2"
   }
 }
