@@ -1,0 +1,107 @@
+.client-orders__title {
+  font-size: var(--font-3xl);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.client-orders__table-wrapper {
+  background: var(--bg-white);
+  border-radius: 20px;
+  padding: 24px;
+  margin-top: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.client-orders__loading,
+.client-orders__empty {
+  color: var(--color-text-soft);
+  text-align: center;
+  padding: 32px;
+}
+
+.client-orders__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.client-orders__thead tr {
+  text-align: left;
+  color: #8a86a3;
+  font-size: var(--font-sm);
+}
+
+.client-orders__thead th {
+  padding: 12px 8px;
+}
+
+.client-orders__tbody tr {
+  border-top: 1px solid #eee;
+}
+
+.client-orders__tbody td {
+  padding: 14px 8px;
+}
+
+.client-orders__td--number {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.client-orders__td--product {
+  color: var(--color-primary);
+}
+
+.client-orders__td--muted {
+  color: var(--color-text-soft);
+}
+
+.client-orders__td--amount {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.order-status-badge {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: var(--font-xs);
+  display: inline-block;
+}
+
+.order-status-badge--paid {
+  background: #e6f7ee;
+  color: #1f9d57;
+}
+
+.order-status-badge--pending {
+  background: #fff4e5;
+  color: #e67e22;
+}
+
+.order-status-badge--default {
+  background: #eee;
+  color: #666;
+}
+
+.client-orders__realisation-btn {
+  display: inline-block;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, #7c6fe0, #a78bfa);
+  color: #fff;
+  border-radius: 999px;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.client-orders__realisation-btn:hover {
+  opacity: 0.85;
+}
+
+.client-orders__realisation-disabled {
+  font-size: var(--font-xs);
+  color: var(--color-text-light);
+  font-style: italic;
+}

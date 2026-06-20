@@ -1,109 +1,63 @@
 import Container from "./Container";
-import exampleImage from "../assets/images/ui-pack.png";
+import televerse from "../assets/images/televerse.png";
+import theme from "../assets/images/theme.png";
+import recevCreation from "../assets/images/recev-creation.png";
+import "./HowItWorksSection.css";
 
-type StepCardProps = {
-  title: string;
-  description: string;
-  image: string;
-  position: string;
-};
-
-function StepCard({ title, description, image, position }: StepCardProps) {
-  return (
-    <div
-      style={{
-        background: "#f6f3ff",
-        padding: "20px",
-        borderRadius: "18px",
-        textAlign: "center",
-      }}
-    >
-      <img
-        src={image}
-        alt={title}
-        style={{
-          width: "100%",
-          height: "160px",
-          objectFit: "cover",
-          objectPosition: position,
-          borderRadius: "14px",
-          marginBottom: "20px",
-          display: "block",
-        }}
-      />
-
-      <h3
-        style={{
-          fontSize: "20px",
-          color: "#3d3a6d",
-          marginBottom: "10px",
-        }}
-      >
-        {title}
-      </h3>
-
-      <p
-        style={{
-          fontSize: "15px",
-          color: "#6a678f",
-          lineHeight: 1.6,
-          margin: 0,
-        }}
-      >
-        {description}
-      </p>
-    </div>
-  );
-}
+const steps = [
+  {
+    number: "1",
+    title: "Téléversez 1-4 photos",
+    description: "Importez facilement les photos de votre enfant en quelques secondes depuis votre appareil.",
+    image: televerse,
+  },
+  {
+    number: "2",
+    title: "Choisissez un thème",
+    description: "Conte, super-héros, pirate ou futuriste — laissez parler votre imagination.",
+    image: theme,
+  },
+  {
+    number: "3",
+    title: "Recevez votre création",
+    description: "Obtenez vos images personnalisées par email ou commandez un album physique.",
+    image: recevCreation,
+  },
+];
 
 function HowItWorksSection() {
   return (
-    <section
-      style={{
-        padding: "70px 0",
-        background: "#ffffff",
-      }}
-    >
+    <section className="how-it-works">
       <Container>
-        <h2
-          style={{
-            fontSize: "32px",
-            color: "#3d3a6d",
-            marginBottom: "40px",
-            fontWeight: 800,
-          }}
-        >
-          Comment ça marche ?
-        </h2>
+        <h2 className="how-it-works__title">Comment ça marche ?</h2>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
-            gap: "30px",
-          }}
-        >
-          <StepCard
-            title="Téléversez 2-4 photos"
-            description="Importez facilement les photos de votre enfant en quelques secondes."
-            image={exampleImage}
-            position="left center"
-          />
-          <StepCard
-            title="Choisissez un thème"
-            description="Conte, super-héros, pirate ou futuriste, laissez parler votre imagination."
-            image={exampleImage}
-            position="center center"
-          />
-          <StepCard
-            title="Visualisez un aperçu"
-            description="Obtenez un aperçu magique avant de finaliser votre commande."
-            image={exampleImage}
-            position="right center"
-          />
+        <div className="how-it-works__grid">
+          {steps.map((step) => (
+            <StepCard key={step.number} {...step} />
+          ))}
         </div>
       </Container>
     </section>
+  );
+}
+
+type StepCardProps = {
+  number: string;
+  title: string;
+  description: string;
+  image: string;
+};
+
+function StepCard({ number, title, description, image }: StepCardProps) {
+  return (
+    <div className="step-card">
+      <div className="step-card__illustration">
+        <span className="step-card__number">{number}</span>
+        <img src={image} alt={title} className="step-card__image" />
+      </div>
+      <h3 className="step-card__title">{title}</h3>
+      <p className="step-card__desc">{description}</p>
+    </div>
   );
 }
 

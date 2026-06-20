@@ -1,0 +1,94 @@
+.navbar {
+  width: 100%;
+  background: var(--bg-white);
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-navbar);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.navbar__logo {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-right: 12px;
+}
+
+.navbar__title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--color-primary-mid);
+  margin: 0;
+}
+
+.navbar__menu {
+  display: flex;
+  gap: 40px;
+  font-weight: 600;
+  color: var(--color-primary-mid);
+  align-items: center;
+}
+
+.navbar__menu-item,
+.navbar__menu span {
+  cursor: pointer;
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.navbar__cart-btn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-pill);
+  border: 1px solid #ece7f7;
+  background: var(--bg-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-cart);
+}
+
+.navbar__cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #e53935;
+  color: #fff;
+  border-radius: var(--radius-pill);
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.navbar__cta-btn {
+  background: var(--color-accent-dark);
+  border: none;
+  padding: 14px 28px;
+  border-radius: var(--radius-badge);
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--font-base);
+  cursor: pointer;
+  box-shadow: var(--shadow-accent);
+}

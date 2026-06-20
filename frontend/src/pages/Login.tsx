@@ -1,163 +1,130 @@
 import { useState } from "react";
 import Layout from "../components/Layout";
 import Container from "../components/Container";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { loginUser } from "../api/auth";
+import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || null;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
     setError("");
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const data = await response.json();
+      const { res: response, data } = await loginUser(email, password);
 
       if (!response.ok) {
         setError(data.message || "Erreur de connexion");
         return;
       }
 
-      // ✅ stockage token
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-
-      // Notifier CartContext (même onglet)
       window.dispatchEvent(new Event("user-logged-in"));
 
-      setSuccess("Connexion réussie 🎉");
+      setSuccess("Connexion réussie !");
 
-      // ✅ redirection après 1.5s
       setTimeout(() => {
-        if (data.user.role === "admin") {
+        if (redirectTo) {
+          navigate(redirectTo);
+        } else if (data.user.role === "admin") {
           navigate("/admin");
         } else {
           navigate("/home");
         }
-      }, 1500);
-    } catch (err) {
+      }, 1000);
+    } catch {
       setError("Erreur serveur");
     }
   };
 
   return (
     <Layout>
-      <section
-        style={{
-          minHeight: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          background: "linear-gradient(135deg,#f6f1ff,#eef5ff)",
-        }}
-      >
+      <section className="login-section">
         <Container>
-          <form
-            onSubmit={handleLogin}
-            style={{
-              maxWidth: 500,
-              margin: "auto",
-              background: "white",
-              padding: 40,
-              borderRadius: 20,
-              boxShadow: "0 10px 40px rgba(0,0,0,0.08)",
-            }}
-          >
-            <h1 style={{ textAlign: "center", marginBottom: 30 }}>
-              Connexion
-            </h1>
+          <div className="login-card">
+            <div className="login-card__header">
+              <p className="section-badge">Bienvenue</p>
+              <h1 className="login-card__title">Connexion</h1>
+              <p className="login-card__subtitle">Accédez à votre espace PetitsRêves</p>
+            </div>
 
             {error && (
-              <div
-                style={{
-                  background: "#ffe6e6",
-                  color: "#d10000",
-                  padding: 10,
-                  borderRadius: 8,
-                  marginBottom: 20,
-                }}
-              >
-                {error}
-              </div>
+              <div className="alert-error alert-error--mb">{error}</div>
             )}
 
             {success && (
-              <div
-                style={{
-                  background: "#e6fff1",
-                  color: "#00a86b",
-                  padding: 10,
-                  borderRadius: 8,
-                  marginBottom: 20,
-                }}
-              >
-                {success}
-              </div>
+              <div className="alert-success alert-success--mb">{success}</div>
             )}
 
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={inputStyle}
-            />
+            <form onSubmit={handleLogin} className="login-form">
+              <div>
+                <label className="form-label">Adresse email</label>
+                <input
+                  type="email"
+                  placeholder="exemple@email.com"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="form-input"
+                />
+              </div>
 
-            <input
-              type="password"
-              placeholder="Mot de passe"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={inputStyle}
-            />
+              <div>
+                <div className="login-card__password-row">
+                  <label className="form-label login-card__password-label">Mot de passe</label>
+                  <Link to="/forgot-password" className="login-card__forgot-link">
+                    Mot de passe oublié ?
+                  </Link>
+                </div>
+                <div className="login-card__password-wrapper">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Votre mot de passe"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="form-input login-card__password-input"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="login-card__eye-btn"
+                    aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
 
-            <button style={buttonStyle}>Se connecter</button>
-          </form>
+              <button type="submit" className="login-card__submit-btn">
+                Se connecter
+              </button>
+            </form>
+
+            <p className="login-card__footer">
+              Pas encore de compte ?{" "}
+              <Link to="/register" className="login-card__register-link">
+                S'inscrire
+              </Link>
+            </p>
+          </div>
         </Container>
       </section>
     </Layout>
   );
 }
-
-const inputStyle = {
-  width: "100%",
-  padding: 14,
-  marginBottom: 15,
-  borderRadius: 10,
-  border: "1px solid #ddd",
-  fontSize: 16,
-};
-
-const buttonStyle = {
-  width: "100%",
-  padding: 14,
-  background: "#f6b93b",
-  border: "none",
-  borderRadius: 10,
-  fontWeight: "bold",
-  fontSize: 16,
-  cursor: "pointer",
-};
 
 export default Login;

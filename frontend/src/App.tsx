@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Services from "./pages/Services";
 import Cart from "./pages/Cart";
 import Account from "./pages/Account";
@@ -22,12 +24,20 @@ import AdminStats from "./pages/admin/AdminStats";
 import AdminProfile from "./pages/admin/AdminProfile";
 import ClientOrders from "./pages/client/ClientOrders";
 import ClientDeliveries from "./pages/client/ClientDeliveries";
+import RealisationPage from "./pages/client/RealisationPage";
+import EditProfile from "./pages/client/EditProfile";
+import VerifyActivation from "./pages/VerifyActivation";
 import AdminServices from "./pages/admin/AdminServices";
 import AIExamples from "./pages/AIExamples";
+import ExamplesPage from "./pages/ExamplesPage";
+import ProductsPage from "./pages/ProductsPage";
 import AlbumsExamples from "./pages/AlbumsExamples";
 import DecorationExamples from "./pages/DecorationExamples";
 import GiftBoxesExamples from "./pages/GiftBoxesExamples";
 import AIStudio from "./pages/AIStudio";
+import FAQ from "./pages/FAQ";
+import CGU from "./pages/CGU";
+import RGPD from "./pages/RGPD";
 import { CartProvider } from "./context/CartContext";
 import { AIProvider } from "./context/AIContext";
 
@@ -41,6 +51,9 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-activation" element={<VerifyActivation />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/account" element={<Account />} />
           <Route path="/admin" element={<AdminDashboard />} />
@@ -60,6 +73,8 @@ function App() {
           <Route path="/admin/profile" element={<AdminProfile />} />
           <Route path="/client/orders" element={<ClientOrders />} />
           <Route path="/client/deliveries" element={<ClientDeliveries />} />
+          <Route path="/client/edit-profile" element={<EditProfile />} />
+          <Route path="/realisation/:orderNumber" element={<RealisationPage />} />
           <Route path="/admin/services" element={<AdminServices />} />
           <Route path="/services/ia-examples" element={<AIExamples />} />
           <Route path="/services/albums-examples" element={<AlbumsExamples />} />
@@ -72,6 +87,11 @@ function App() {
             element={<GiftBoxesExamples />}
           />
           <Route path="/ai-studio" element={<AIStudio />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/examples" element={<ExamplesPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/cgu" element={<CGU />} />
+          <Route path="/rgpd" element={<RGPD />} />
         </Routes>
       </BrowserRouter>
       </AIProvider>

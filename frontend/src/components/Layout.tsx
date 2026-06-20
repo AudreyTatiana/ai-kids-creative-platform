@@ -1,11 +1,8 @@
+import "./Layout.css";
+
 function Layout({ children }: any) {
   return (
-    <div
-      style={{
-        background: "#f4f3fb",
-        minHeight: "100vh",
-      }}
-    >
+    <div className="layout">
       {children}
     </div>
   );

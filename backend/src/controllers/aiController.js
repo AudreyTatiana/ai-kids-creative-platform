@@ -2,11 +2,8 @@ const aiService = require("../services/aiService");
 
 async function generate(req, res) {
   try {
-    const { theme } = req.body;
-    const images = req.files; // req.files pour plusieurs images
-    
-    console.log("BODY :", req.body);
-    console.log("FILES :", req.files);
+    const { theme, product, childName } = req.body;
+    const images = req.files;
 
     if (!images || images.length === 0) {
       return res.status(400).json({
@@ -20,8 +17,7 @@ async function generate(req, res) {
       });
     }
 
-    // On passe le tableau d'images au service
-    const result = await aiService.generateImage(theme, images);
+    const result = await aiService.generateImage(theme, images, product || null, childName || null);
 
     return res.status(200).json({
       message: "Génération lancée avec succès.",

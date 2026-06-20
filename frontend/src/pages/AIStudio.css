@@ -1,0 +1,111 @@
+.ai-studio {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fffdfd 0%, #f8f5ff 100%);
+}
+
+.ai-studio__main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  display: grid;
+  gap: 28px;
+}
+
+.ai-studio__header {
+  background: var(--bg-white);
+  border-radius: var(--radius-2xl);
+  padding: 36px;
+  box-shadow: var(--shadow-page);
+  border: 1px solid #efe9fb;
+  text-align: center;
+}
+
+.ai-studio__brand-label {
+  margin: 0 0 10px;
+  color: #f0aa16;
+  font-size: var(--font-sm);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ai-studio__title {
+  margin: 0 0 14px;
+  color: var(--color-primary);
+  font-size: 42px;
+  font-weight: 800;
+}
+
+.ai-studio__subtitle {
+  margin: 0 auto;
+  max-width: 760px;
+  color: var(--color-text-soft);
+  font-size: var(--font-md);
+  line-height: 1.8;
+}
+
+.ai-studio__form {
+  background: var(--bg-white);
+  border-radius: var(--radius-2xl);
+  padding: 28px;
+  box-shadow: var(--shadow-page);
+  border: 1px solid #efe9fb;
+  display: grid;
+  gap: 20px;
+}
+
+.ai-studio__select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #ddd4f2;
+  font-size: var(--font-base);
+  outline: none;
+  background: var(--bg-white);
+}
+
+.ai-studio__generate-btn {
+  background: var(--color-blue-gradient);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 20px;
+  font-size: var(--font-base);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ai-studio__generate-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.ai-studio__message {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #eef5ff;
+  color: #3973d6;
+  font-size: var(--font-sm);
+  font-weight: 700;
+}
+
+.ai-studio__prompt-result {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+}
+
+.ai-studio__prompt-title {
+  margin: 0 0 12px;
+  color: var(--color-primary);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.ai-studio__prompt-text {
+  margin: 0;
+  color: var(--color-text-admin);
+  font-size: var(--font-base);
+  line-height: 1.8;
+}

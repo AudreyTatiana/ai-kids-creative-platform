@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ClientLayout from "../../components/client/ClientLayout";
+import { fetchClientOrders } from "../../api/orders";
+import "./ClientOrders.css";
 
 interface Order {
   id: number;
@@ -15,68 +18,117 @@ interface Order {
 function ClientOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [debugInfo, setDebugInfo] = useState("");
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user) { setLoading(false); return; }
-    const { email } = JSON.parse(user);
-    fetch(`http://localhost:5000/api/orders/client/${email}`)
-      .then((res) => res.json())
-      .then((data) => setOrders(Array.isArray(data) ? data : []))
-      .catch(() => setOrders([]))
+    const stored = localStorage.getItem("user");
+    if (!stored) {
+      setDebugInfo("Aucun utilisateur connecté (localStorage vide)");
+      setLoading(false);
+      return;
+    }
+    const parsed = JSON.parse(stored);
+    const email = parsed?.email;
+    setDebugInfo(`Email utilisé : ${email}`);
+    console.log("[ClientOrders] Email utilisé :", email);
+
+    fetchClientOrders(email)
+      .then((data) => {
+        console.log("[ClientOrders] Réponse API :", data);
+        if (Array.isArray(data)) {
+          setOrders(data);
+        } else {
+          setDebugInfo(`Email : ${email} | Réponse API non-tableau : ${JSON.stringify(data)}`);
+          setOrders([]);
+        }
+      })
+      .catch((err) => {
+        console.error("[ClientOrders] Erreur fetch :", err);
+        setDebugInfo(`Erreur réseau : ${err.message}`);
+        setOrders([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
-  const getStatusColor = (status: string) => {
-    if (status === "paid") return { bg: "#e6f7ee", color: "#1f9d57", label: "Payée" };
-    if (status === "pending") return { bg: "#fff4e5", color: "#e67e22", label: "En attente" };
-    return { bg: "#eee", color: "#666", label: status };
+  const getStatusClass = (status: string) => {
+    if (status === "paid") return "order-status-badge order-status-badge--paid";
+    if (status === "pending") return "order-status-badge order-status-badge--pending";
+    return "order-status-badge order-status-badge--default";
+  };
+
+  const getStatusLabel = (status: string) => {
+    if (status === "paid") return "Payée";
+    if (status === "pending") return "En attente";
+    return status;
   };
 
   const fmt = (n: number) => Number(n).toFixed(2).replace(".", ",") + "€";
 
   const formatDate = (dateStr: string) =>
-    new Date(dateStr).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+    new Date(dateStr).toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
 
   return (
     <ClientLayout>
-      <h1 style={{ fontSize: 28, color: "#3d3a6d", fontWeight: 800 }}>Mes commandes</h1>
+      <h1 className="client-orders__title">Mes commandes</h1>
 
-      <div style={{ background: "#fff", borderRadius: 20, padding: 24, marginTop: 20, boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
+      <div className="client-orders__table-wrapper">
         {loading ? (
-          <p style={{ color: "#7a7699", textAlign: "center", padding: "32px" }}>Chargement...</p>
+          <p className="client-orders__loading">Chargement...</p>
         ) : orders.length === 0 ? (
-          <p style={{ color: "#7a7699", textAlign: "center", padding: "32px" }}>Aucune commande pour l'instant.</p>
+          <div>
+            <p className="client-orders__empty">Aucune commande pour l'instant.</p>
+            {debugInfo && (
+              <p style={{ fontSize: "12px", color: "#aaa", textAlign: "center", padding: "8px" }}>
+                Debug : {debugInfo}
+              </p>
+            )}
+          </div>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ textAlign: "left", color: "#8a86a3", fontSize: "14px" }}>
-                <th style={{ padding: "12px 8px" }}>Numéro</th>
-                <th style={{ padding: "12px 8px" }}>Produit</th>
-                <th style={{ padding: "12px 8px" }}>Thème</th>
-                <th style={{ padding: "12px 8px" }}>Date</th>
-                <th style={{ padding: "12px 8px" }}>Montant</th>
-                <th style={{ padding: "12px 8px" }}>Statut</th>
+          <table className="client-orders__table">
+            <thead className="client-orders__thead">
+              <tr>
+                <th>Numéro</th>
+                <th>Produit</th>
+                <th>Thème</th>
+                <th>Date</th>
+                <th>Montant</th>
+                <th>Statut</th>
+                <th>Réalisation</th>
               </tr>
             </thead>
-            <tbody>
-              {orders.map((o) => {
-                const s = getStatusColor(o.status);
-                return (
-                  <tr key={o.id} style={{ borderTop: "1px solid #eee" }}>
-                    <td style={{ padding: "14px 8px", color: "#3d3a6d", fontWeight: 700 }}>#{o.order_number}</td>
-                    <td style={{ padding: "14px 8px", color: "#3d3a6d" }}>{o.product}</td>
-                    <td style={{ padding: "14px 8px", color: "#7a7699" }}>{o.theme}</td>
-                    <td style={{ padding: "14px 8px", color: "#7a7699" }}>{formatDate(o.created_at)}</td>
-                    <td style={{ padding: "14px 8px", color: "#3d3a6d", fontWeight: 700 }}>{fmt(o.amount)}</td>
-                    <td style={{ padding: "14px 8px" }}>
-                      <span style={{ background: s.bg, color: s.color, padding: "6px 12px", borderRadius: 999, fontWeight: 600, fontSize: "13px" }}>
-                        {s.label}
+            <tbody className="client-orders__tbody">
+              {orders.map((o) => (
+                <tr key={o.id}>
+                  <td className="client-orders__td--number">#{o.order_number}</td>
+                  <td className="client-orders__td--product">{o.product}</td>
+                  <td className="client-orders__td--muted">{o.theme}</td>
+                  <td className="client-orders__td--muted">{formatDate(o.created_at)}</td>
+                  <td className="client-orders__td--amount">{fmt(o.amount)}</td>
+                  <td>
+                    <span className={getStatusClass(o.status)}>
+                      {getStatusLabel(o.status)}
+                    </span>
+                  </td>
+                  <td>
+                    {o.status === "paid" ? (
+                      <Link
+                        to={`/realisation/${o.order_number}`}
+                        className="client-orders__realisation-btn"
+                      >
+                        ✨ Voir ma réalisation
+                      </Link>
+                    ) : (
+                      <span className="client-orders__realisation-disabled">
+                        En attente
                       </span>
-                    </td>
-                  </tr>
-                );
-              })}
+                    )}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         )}

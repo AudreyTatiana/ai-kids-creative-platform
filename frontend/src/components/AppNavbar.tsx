@@ -1,22 +1,14 @@
 import { Link } from "react-router-dom";
+import "./AppNavbar.css";
 
 function AppNavbar() {
   return (
-    <div
-      style={{
-        background: "#ffffff",
-        padding: "18px 40px",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        borderBottom: "1px solid #eee",
-      }}
-    >
-      <h2 style={{ margin: 0, color: "#3d3a6d" }}>
+    <div className="app-navbar">
+      <h2 className="app-navbar__title">
         PetitsRêves
       </h2>
 
-      <div style={{ display: "flex", gap: 28 }}>
+      <div className="app-navbar__links">
         <Link to="/services">Services</Link>
         <Link to="/account">Mon compte</Link>
         <Link to="/cart">Panier</Link>

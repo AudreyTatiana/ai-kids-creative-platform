@@ -1,0 +1,152 @@
+/* CSS partagé pour OrdersTable, DeliveriesTable, ThemesTable */
+
+.admin-table-section {
+  background: var(--bg-white);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: 0 18px 40px rgba(117, 100, 170, 0.10);
+  border: 1px solid #efe9fb;
+}
+
+.admin-table-section__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-table-section__title {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: var(--font-2xl);
+  font-weight: 800;
+}
+
+.admin-table-section__download-btn {
+  background: var(--bg-white);
+  color: #6d67a0;
+  border: 1px solid #ddd4f2;
+  border-radius: 14px;
+  padding: 10px 16px;
+  font-size: var(--font-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table thead tr {
+  background: var(--bg-card);
+}
+
+.admin-table th,
+.admin-table__th {
+  text-align: left;
+  padding: 14px 16px;
+  color: #6d67a0;
+  font-size: var(--font-sm);
+  font-weight: 800;
+  border-bottom: 1px solid var(--border-card);
+}
+
+.admin-table td,
+.admin-table__td {
+  padding: 14px 16px;
+  color: #4f4a76;
+  font-size: var(--font-base);
+  border-bottom: 1px solid #f2eefb;
+  vertical-align: middle;
+}
+
+.admin-table tr {
+  border-top: 1px solid #eee;
+}
+
+/* Badges statut */
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: var(--font-xs);
+  font-weight: 700;
+}
+
+.badge--paid,
+.badge--active,
+.badge--delivered {
+  background: var(--bg-success);
+  color: var(--color-success);
+}
+
+.badge--pending,
+.badge--preparing {
+  background: #fff7e8;
+  color: #d48a00;
+}
+
+.badge--inprogress,
+.badge--shipped {
+  background: #eef5ff;
+  color: #3973d6;
+}
+
+.badge--default {
+  background: #eef1ff;
+  color: #5d6fe4;
+}
+
+/* Bouton action table */
+.table-action-btn {
+  background: var(--bg-white);
+  color: #6d67a0;
+  border: 1px solid #ddd4f2;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Bouton danger table */
+.table-action-btn--danger {
+  background: #fff5f5;
+  color: var(--color-error);
+  border: 1px solid var(--border-error);
+}
+
+/* Delivery badge */
+.delivery-badge--home {
+  background: #fff1f1;
+  color: var(--color-error);
+}
+
+.delivery-badge--email {
+  background: #eef5ff;
+  color: #3973d6;
+}
+
+/* Titre de section avec marge basse */
+.admin-table-section__title--mb {
+  margin-bottom: 18px;
+}
+
+/* Sous-texte email dans les cellules */
+.admin-table__email-sub {
+  font-size: 12px;
+  color: #8f89b2;
+}
+
+/* Groupe boutons actions dans une cellule */
+.admin-table__action-btns {
+  display: flex;
+  gap: 8px;
+}

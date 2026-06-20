@@ -1,0 +1,64 @@
+.examples-section {
+  padding: 60px 0;
+  background: var(--bg-section);
+}
+
+.examples-section__title {
+  font-size: var(--font-4xl);
+  color: var(--color-primary);
+  margin-bottom: 30px;
+  font-weight: 800;
+}
+
+.examples-section__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Carte — même style que hero__image-wrapper */
+.example-card {
+  background: #ffffffcc;
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  box-shadow: var(--shadow-section);
+}
+
+/* Cadre image — même style que hero__image-frame */
+.example-card__frame {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.example-card__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.example-card:hover .example-card__image {
+  transform: scale(1.03);
+}
+
+.example-card:hover .example-card__image {
+  transform: scale(1.04);
+}
+
+.example-card__body {
+  padding: 16px 4px 4px;
+}
+
+.example-card__title {
+  margin: 0 0 8px;
+  font-size: var(--font-lg);
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.example-card__desc {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}

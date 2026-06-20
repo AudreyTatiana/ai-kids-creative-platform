@@ -1,3 +1,86 @@
+/* ============================================================
+   VARIABLES GLOBALES — Charte graphique PetitsRêves
+   ============================================================ */
+:root {
+  /* Couleurs principales */
+  --color-primary:        #3d3a6d;   /* Texte titres, violet foncé */
+  --color-primary-dark:   #2f2a5a;
+  --color-primary-mid:    #2f2c5a;
+  --color-accent:         #f6b93b;   /* Jaune/Or */
+  --color-accent-dark:    #E7A928;
+  --color-blue:           #4f7cff;   /* Bleu CTA */
+  --color-blue-gradient:  linear-gradient(135deg, #6f8fff 0%, #9c8cff 100%);
+
+  /* Textes secondaires */
+  --color-text-muted:     #6a678f;
+  --color-text-soft:      #7a7699;
+  --color-text-light:     #8f89b2;
+  --color-text-admin:     #5f5989;
+
+  /* Fonds */
+  --bg-page:              #f6f1ff;
+  --bg-page-alt:          #f4f3fb;
+  --bg-section:           #fcfbff;
+  --bg-white:             #ffffff;
+  --bg-card:              #faf8ff;
+  --bg-hero:              linear-gradient(135deg, #f6f1ff 0%, #eef5ff 50%, #fdf7ff 100%);
+  --bg-auth:              linear-gradient(135deg, #f6f1ff 0%, #eef5ff 100%);
+  --bg-admin:             linear-gradient(180deg, #f8f5ff 0%, #f3f7ff 100%);
+  --bg-page-inner:        linear-gradient(180deg, #fbf9ff 0%, #f3f0fb 100%);
+  --bg-success:           #ebfff1;
+  --bg-error:             #fff1f1;
+  --bg-warning:           #fff8ef;
+
+  /* Bordures */
+  --border-light:         #d9d4ee;
+  --border-card:          #eee8fb;
+  --border-success:       #ccefd8;
+  --border-error:         #f1d0d0;
+  --border-warning:       #f3dfb6;
+  --border-admin:         #f0ebfa;
+
+  /* Textes état */
+  --color-success:        #1f9d57;
+  --color-error:          #c0392b;
+  --color-error-dark:     #e74c3c;
+
+  /* Ombres */
+  --shadow-card:          0 18px 40px rgba(117, 100, 170, 0.14);
+  --shadow-navbar:        0 2px 12px rgba(0, 0, 0, 0.04);
+  --shadow-section:       0 10px 30px rgba(117, 100, 170, 0.12);
+  --shadow-page:          0 20px 50px rgba(117, 100, 170, 0.10);
+  --shadow-cart:          0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-accent:        0 6px 16px rgba(231, 169, 40, 0.35);
+  --shadow-admin-link:    0 12px 24px rgba(111, 143, 255, 0.22);
+  --shadow-logout:        0 10px 20px rgba(192, 57, 43, 0.08);
+
+  /* Rayons */
+  --radius-sm:            12px;
+  --radius-md:            16px;
+  --radius-lg:            18px;
+  --radius-xl:            24px;
+  --radius-2xl:           28px;
+  --radius-pill:          50%;
+  --radius-badge:         28px;
+
+  /* Typographie */
+  --font-xs:              13px;
+  --font-sm:              14px;
+  --font-base:            15px;
+  --font-md:              16px;
+  --font-lg:              18px;
+  --font-xl:              20px;
+  --font-2xl:             24px;
+  --font-3xl:             28px;
+  --font-4xl:             32px;
+  --font-5xl:             36px;
+  --font-6xl:             38px;
+  --font-hero:            52px;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
 * {
   box-sizing: border-box;
 }
@@ -13,8 +96,8 @@ body,
 
 body {
   font-family: Arial, sans-serif;
-  background: #f6f1ff;
-  color: #2f2a5a;
+  background: var(--bg-page);
+  color: var(--color-primary-dark);
 }
 
 a {
@@ -26,4 +109,102 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+/* ============================================================
+   CLASSES UTILITAIRES PARTAGÉES
+   ============================================================ */
+
+/* Boutons */
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 14px 22px;
+  font-size: var(--font-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: var(--bg-white);
+  color: var(--color-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 14px 22px;
+  font-size: var(--font-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-blue {
+  background: var(--color-blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 14px 22px;
+  font-size: var(--font-md);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Formulaires */
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: var(--font-base);
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  font-size: var(--font-base);
+  outline: none;
+  box-sizing: border-box;
+  background: var(--bg-white);
+}
+
+/* Messages état */
+.alert-success {
+  background: var(--bg-success);
+  border: 1px solid var(--border-success);
+  color: var(--color-success);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  text-align: center;
+}
+
+.alert-error {
+  background: var(--bg-error);
+  border: 1px solid var(--border-error);
+  color: var(--color-error);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Card générique */
+.card {
+  background: var(--bg-white);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-card);
+}
+
+/* Section badge label (ex: "Bienvenue", "Nouveau compte") */
+.section-badge {
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: var(--font-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px;
 }

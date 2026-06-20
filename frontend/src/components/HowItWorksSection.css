@@ -1,0 +1,68 @@
+.how-it-works {
+  padding: 70px 0;
+  background: var(--bg-white);
+}
+
+.how-it-works__title {
+  font-size: var(--font-4xl);
+  color: var(--color-primary);
+  margin-bottom: 40px;
+  font-weight: 800;
+}
+
+.how-it-works__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.step-card {
+  background: #f6f3ff;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.step-card__illustration {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card__image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+}
+
+.step-card__number {
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  width: 28px;
+  height: 28px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-card__title {
+  font-size: var(--font-xl);
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.step-card__desc {
+  font-size: var(--font-base);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0;
+}

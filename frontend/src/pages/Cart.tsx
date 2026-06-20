@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import ClientLayout from "../components/client/ClientLayout";
 import { useCart } from "../context/CartContext";
+import "./Cart.css";
 
 function Cart() {
   const navigate = useNavigate();
@@ -11,37 +12,37 @@ function Cart() {
 
   return (
     <ClientLayout>
-      <div style={{ display: "grid", gap: "24px" }}>
-        <header style={{ background: "#ffffff", borderRadius: "24px", padding: "20px 24px", boxShadow: "0 18px 40px rgba(117, 100, 170, 0.10)", border: "1px solid #efe9fb" }}>
-          <h2 style={{ margin: "0 0 6px", color: "#3d3a6d", fontSize: "28px", fontWeight: 800 }}>Mon panier</h2>
-          <p style={{ margin: 0, color: "#7a7699", fontSize: "15px" }}>Consultez vos créations en attente avant validation et paiement.</p>
+      <div className="cart-wrapper">
+        <header className="cart-header">
+          <h2 className="cart-header__title">Mon panier</h2>
+          <p className="cart-header__subtitle">Consultez vos créations en attente avant validation et paiement.</p>
         </header>
 
         {cartItems.length === 0 ? (
-          <div style={{ background: "#fff", borderRadius: "24px", padding: "48px", textAlign: "center", boxShadow: "0 18px 40px rgba(117, 100, 170, 0.10)", border: "1px solid #efe9fb" }}>
-            <p style={{ color: "#7a7699", fontSize: "16px", marginBottom: "20px" }}>Votre panier est vide.</p>
-            <button onClick={() => navigate("/upload")} style={{ background: "#f6b93b", color: "#fff", border: "none", borderRadius: "14px", padding: "12px 24px", fontWeight: 700, cursor: "pointer" }}>
+          <div className="cart-empty">
+            <p className="cart-empty__text">Votre panier est vide.</p>
+            <button onClick={() => navigate("/upload")} className="cart-empty__btn">
               Créer un projet
             </button>
           </div>
         ) : (
-          <section style={{ display: "grid", gridTemplateColumns: "1.3fr 0.7fr", gap: "24px", alignItems: "start" }}>
-            <div style={{ background: "#ffffff", borderRadius: "24px", padding: "24px", boxShadow: "0 18px 40px rgba(117, 100, 170, 0.10)", border: "1px solid #efe9fb", display: "grid", gap: "18px" }}>
+          <section className="cart-content">
+            <div className="cart-items">
               {cartItems.map((item) => (
-                <div key={item._id} style={{ display: "grid", gridTemplateColumns: "120px 1fr auto", gap: "18px", alignItems: "center", paddingBottom: "18px", borderBottom: "1px solid #f2eefb" }}>
-                  <div style={{ height: "96px", borderRadius: "18px", overflow: "hidden", background: "linear-gradient(135deg, #d9ccff 0%, #c6e4ff 55%, #ffe8f7 100%)" }}>
-                    {item.previewImage && <img src={item.previewImage} alt={item.product} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
+                <div key={item._id} className="cart-item">
+                  <div className="cart-item__image">
+                    {item.previewImage && <img src={item.previewImage} alt={item.product} />}
                   </div>
 
                   <div>
-                    <h3 style={{ margin: "0 0 8px", color: "#3d3a6d", fontSize: "20px", fontWeight: 800 }}>{item.product}</h3>
-                    <p style={{ margin: "0 0 6px", color: "#7a7699", fontSize: "14px" }}>Thème : {item.theme}</p>
-                    <p style={{ margin: 0, color: "#7a7699", fontSize: "14px" }}>Livraison : {item.delivery === "email" ? "Email" : "Domicile"}</p>
+                    <h3 className="cart-item__title">{item.product}</h3>
+                    <p className="cart-item__detail">Thème : {item.theme}</p>
+                    <p className="cart-item__detail">Livraison : {item.delivery === "email" ? "Email" : "Domicile"}</p>
                   </div>
 
-                  <div style={{ textAlign: "right" }}>
-                    <p style={{ margin: "0 0 10px", color: "#3d3a6d", fontSize: "18px", fontWeight: 800 }}>{fmt(item.price)}</p>
-                    <button onClick={() => removeFromCart(item._id)} style={{ background: "#fff5f5", color: "#c0392b", border: "1px solid #f1d0d0", borderRadius: "999px", padding: "8px 14px", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
+                  <div className="cart-item__price-col">
+                    <p className="cart-item__price">{fmt(item.price)}</p>
+                    <button onClick={() => removeFromCart(item._id)} className="cart-item__remove-btn">
                       Retirer
                     </button>
                   </div>
@@ -49,18 +50,18 @@ function Cart() {
               ))}
             </div>
 
-            <div style={{ background: "#ffffff", borderRadius: "24px", padding: "24px", boxShadow: "0 18px 40px rgba(117, 100, 170, 0.10)", border: "1px solid #efe9fb" }}>
-              <h3 style={{ margin: "0 0 18px", color: "#3d3a6d", fontSize: "24px", fontWeight: 800 }}>Résumé</h3>
-              <div style={{ display: "grid", gap: "14px", marginBottom: "18px" }}>
+            <div className="cart-summary">
+              <h3 className="cart-summary__title">Résumé</h3>
+              <div className="cart-summary__rows">
                 <SummaryRow label="Articles" value={String(cartItems.length)} />
                 <SummaryRow label="Sous-total" value={fmt(total)} />
                 <SummaryRow label="Frais de livraison" value="selon choix" />
               </div>
-              <div style={{ borderTop: "1px solid #eee8fb", paddingTop: "18px", marginBottom: "20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ color: "#3d3a6d", fontSize: "18px", fontWeight: 800 }}>Total</span>
-                <span style={{ color: "#3d3a6d", fontSize: "24px", fontWeight: 800 }}>{fmt(total)}</span>
+              <div className="cart-summary__total-row">
+                <span className="cart-summary__total-label">Total</span>
+                <span className="cart-summary__total-value">{fmt(total)}</span>
               </div>
-              <button onClick={() => navigate("/checkout")} style={{ width: "100%", background: "#f6b93b", color: "#fff", border: "none", borderRadius: "14px", padding: "14px 18px", fontSize: "15px", fontWeight: 700, cursor: "pointer" }}>
+              <button onClick={() => navigate("/checkout")} className="cart-summary__checkout-btn">
                 Continuer vers le paiement
               </button>
             </div>
@@ -73,9 +74,9 @@ function Cart() {
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px" }}>
-      <span style={{ color: "#7a7699", fontSize: "15px" }}>{label}</span>
-      <span style={{ color: "#3d3a6d", fontSize: "15px", fontWeight: 700 }}>{value}</span>
+    <div className="summary-row">
+      <span className="summary-row__label">{label}</span>
+      <span className="summary-row__value">{value}</span>
     </div>
   );
 }

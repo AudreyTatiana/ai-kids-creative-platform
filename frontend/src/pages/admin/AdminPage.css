@@ -1,0 +1,362 @@
+/* CSS partagé pour toutes les pages admin :
+   AdminOrders, AdminClients, AdminDeliveries, AdminPayments,
+   AdminProducts, AdminProfile, AdminServices, AdminStats, AdminThemes */
+
+.admin-page {
+  display: grid;
+  gap: 24px;
+}
+
+/* En-tête page admin */
+.admin-page__header {
+  background: var(--bg-white);
+  border-radius: var(--radius-xl);
+  padding: 20px 24px;
+  box-shadow: 0 18px 40px rgba(117, 100, 170, 0.10);
+  border: 1px solid #efe9fb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-page__header-title {
+  margin: 0 0 6px;
+  color: var(--color-primary);
+  font-size: var(--font-3xl);
+  font-weight: 800;
+}
+
+.admin-page__header-subtitle {
+  margin: 0;
+  color: var(--color-text-soft);
+  font-size: var(--font-base);
+}
+
+/* Contenu principal */
+.admin-page__content {
+  background: var(--bg-white);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: 0 18px 40px rgba(117, 100, 170, 0.10);
+  border: 1px solid #efe9fb;
+}
+
+/* Filtres / barre de recherche */
+.admin-page__filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.admin-page__search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  font-size: var(--font-base);
+  outline: none;
+  background: var(--bg-white);
+}
+
+.admin-page__filter-select {
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  font-size: var(--font-base);
+  outline: none;
+  background: var(--bg-white);
+  cursor: pointer;
+}
+
+/* Stats cards ligne */
+.admin-page__stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+/* Card stat individuelle */
+.admin-stat-card {
+  background: var(--bg-white);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 18px 40px rgba(117, 100, 170, 0.10);
+  border: 1px solid #efe9fb;
+  text-align: center;
+}
+
+.admin-stat-card__label {
+  margin: 0 0 8px;
+  color: var(--color-text-soft);
+  font-size: var(--font-sm);
+  font-weight: 700;
+}
+
+.admin-stat-card__value {
+  margin: 0 0 6px;
+  color: var(--color-primary);
+  font-size: var(--font-4xl);
+  font-weight: 800;
+}
+
+.admin-stat-card__sub {
+  margin: 0;
+  color: #9a95b6;
+  font-size: var(--font-sm);
+}
+
+/* Graphique barre (stats) */
+.stats-bar-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.stats-bar-block {
+  background: var(--bg-white);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: 0 18px 40px rgba(117, 100, 170, 0.10);
+  border: 1px solid #efe9fb;
+}
+
+.stats-bar-block__title {
+  margin: 0 0 20px;
+  color: var(--color-primary);
+  font-size: var(--font-2xl);
+  font-weight: 800;
+}
+
+.stats-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.stats-bar-item__label {
+  width: 160px;
+  flex-shrink: 0;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.stats-bar-item__track {
+  flex: 1;
+  height: 10px;
+  background: #eee8fb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stats-bar-item__fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6f8fff 0%, #f6b93b 100%);
+  border-radius: 999px;
+}
+
+.stats-bar-item__count {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--color-primary);
+  min-width: 28px;
+  text-align: right;
+}
+
+/* Profile admin */
+.admin-profile-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.admin-profile-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: 0 18px 40px rgba(117, 100, 170, 0.10);
+  border: 1px solid #efe9fb;
+  text-align: center;
+}
+
+.admin-profile-card__avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-pill);
+  background: var(--color-blue-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 34px;
+  font-weight: 800;
+  margin: 0 auto 18px;
+}
+
+.admin-profile-card__name {
+  margin: 0 0 6px;
+  color: var(--color-primary);
+  font-size: var(--font-2xl);
+  font-weight: 800;
+}
+
+.admin-profile-card__role-badge {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #eef5ff;
+  color: #3973d6;
+  font-size: var(--font-xs);
+  font-weight: 700;
+}
+
+/* Actions */
+.admin-page__actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.admin-page__btn-primary {
+  background: var(--color-blue-gradient);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-size: var(--font-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-page__btn-secondary {
+  background: var(--bg-white);
+  color: #6d67a0;
+  border: 1px solid #ddd4f2;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-size: var(--font-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* États chargement / vide / erreur */
+.admin-page__status-msg {
+  color: #7a7699;
+  padding: 20px;
+}
+
+.admin-page__error-inline {
+  color: #e74c3c;
+  padding: 20px;
+}
+
+.admin-page__no-data {
+  color: #7a7699;
+}
+
+/* Profile - email sous le nom */
+.admin-profile-card__email {
+  margin: 0 0 18px;
+  color: #7a7699;
+  font-size: 15px;
+}
+
+/* Profile - colonne droite */
+.admin-profile-right {
+  display: grid;
+  gap: 24px;
+}
+
+/* Profile - titre de section */
+.admin-profile-section-title {
+  margin: 0 0 18px;
+  color: var(--color-primary);
+  font-size: var(--font-2xl);
+  font-weight: 800;
+}
+
+/* Profile - grille infos */
+.admin-profile-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Profile - carte info */
+.admin-profile-info-card {
+  background: #faf8ff;
+  border: 1px solid #eee8fb;
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.admin-profile-info-card__label {
+  margin: 0 0 6px;
+  color: #8f89b2;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.admin-profile-info-card__value {
+  margin: 0;
+  color: #3d3a6d;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Bloc note/avertissement */
+.admin-page__note {
+  background: #fff8ef;
+  border: 1px solid #f3dfb6;
+  border-radius: 22px;
+  padding: 20px;
+}
+
+.admin-page__note-text {
+  margin: 0;
+  color: #7a7699;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Grilles formulaire admin */
+.admin-page__form-grid--5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  align-items: end;
+}
+
+.admin-page__form-grid--4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  align-items: end;
+}
+
+.admin-page__form-btns {
+  display: flex;
+  gap: 10px;
+  grid-column: 1 / -1;
+}
+
+.admin-page__form-full {
+  grid-column: 1 / -1;
+}
+
+/* Filtre avec marge basse */
+.admin-page__filters-mb {
+  margin-bottom: 20px;
+}
+
+/* Grille données statistiques */
+.admin-stats-data-grid {
+  display: grid;
+  gap: 16px;
+}

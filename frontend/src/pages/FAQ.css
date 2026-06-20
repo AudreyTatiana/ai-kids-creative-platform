@@ -1,0 +1,217 @@
+.faq-section {
+  padding: 80px 0;
+  background: linear-gradient(180deg, #fffdfd 0%, #f8f5ff 100%);
+  min-height: calc(100vh - 80px);
+}
+
+.faq-section__header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.faq-section__badge {
+  margin: 0 0 10px;
+  color: #d4a017;
+  font-weight: 700;
+  font-size: var(--font-sm);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.faq-section__title {
+  margin: 0 0 20px;
+  font-size: 48px;
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.faq-section__subtitle {
+  margin: 0 auto;
+  max-width: 600px;
+  color: var(--color-text-soft);
+  font-size: var(--font-lg);
+  line-height: 1.6;
+}
+
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background: var(--bg-white);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(120, 100, 180, 0.06);
+  border: 1px solid #f0ebfa;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.faq-item__toggle-btn {
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.faq-item__question {
+  font-size: var(--font-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.faq-item__answer {
+  padding: 0 24px 24px 56px;
+  color: var(--color-text-soft);
+  font-size: var(--font-md);
+  line-height: 1.6;
+}
+
+.faq-contact-box {
+  margin-top: 60px;
+  text-align: center;
+  padding: 40px;
+  background: var(--bg-white);
+  border-radius: var(--radius-xl);
+  border: 1px dashed #dcd6f7;
+}
+
+.faq-contact-box__title {
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+.faq-contact-box__subtitle {
+  color: var(--color-text-soft);
+  margin-bottom: 20px;
+}
+
+.faq-contact-box__btn {
+  background: var(--color-accent-dark);
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(231, 169, 40, 0.3);
+}
+
+/* Modal */
+.faq-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(47, 44, 90, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.faq-modal {
+  background: var(--bg-white);
+  width: 100%;
+  max-width: 500px;
+  border-radius: var(--radius-2xl);
+  padding: 40px;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.faq-modal__close-btn {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  background: #f4f3fb;
+  border: none;
+  border-radius: var(--radius-pill);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-soft);
+}
+
+.faq-modal__title {
+  margin: 0 0 10px;
+  font-size: var(--font-3xl);
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.faq-modal__subtitle {
+  color: var(--color-text-soft);
+  margin-bottom: 28px;
+}
+
+.faq-modal__form {
+  display: grid;
+  gap: 20px;
+}
+
+.faq-modal__textarea {
+  resize: none;
+  font-family: inherit;
+}
+
+.faq-modal__submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--color-accent-dark);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: var(--font-md);
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(231, 169, 40, 0.3);
+}
+
+.faq-modal__submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.faq-modal__success {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--color-success);
+  font-weight: 700;
+}
+
+.faq-modal__success-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--bg-success);
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.faq-modal__error {
+  background: #fff1f1;
+  color: #c0392b;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+}

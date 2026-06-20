@@ -1,0 +1,121 @@
+.verify-section {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding: 48px 0;
+}
+
+.verify-card {
+  max-width: 480px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 24px;
+  padding: 48px 40px;
+  box-shadow: 0 4px 32px rgba(111, 143, 255, 0.1);
+  text-align: center;
+}
+
+.verify-card__icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.verify-card__title {
+  font-size: 26px;
+  font-weight: 800;
+  color: #3d3a6d;
+  margin: 0 0 12px;
+}
+
+.verify-card__subtitle {
+  color: #7a7699;
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0 0 32px;
+}
+
+.verify-form__digits {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.verify-form__digit-input {
+  width: 52px;
+  height: 60px;
+  border: 2px solid #e0daf5;
+  border-radius: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #3d3a6d;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #faf8ff;
+}
+
+.verify-form__digit-input:focus {
+  border-color: #6f8fff;
+  box-shadow: 0 0 0 3px rgba(111, 143, 255, 0.15);
+  background: #fff;
+}
+
+.verify-form__btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #6f8fff, #9c8cff);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.verify-form__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.verify-card__footer {
+  margin-top: 24px;
+  color: #8f89b2;
+  font-size: 14px;
+}
+
+.verify-card__link {
+  color: #6f8fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.verify-card__link:hover {
+  text-decoration: underline;
+}
+
+.alert-success {
+  background: #edfdf3;
+  border: 1px solid #86efac;
+  color: #166534;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.alert-error {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.alert-success--mb,
+.alert-error--mb {
+  margin-bottom: 20px;
+}

@@ -1,0 +1,40 @@
+# Dépendances
+node_modules/
+npm-debug.log*
+
+# Git
+.git/
+.gitignore
+
+# Variables d'environnement
+.env
+.env.*
+!.env.example
+
+# Uploads utilisateurs
+uploads/
+
+# Fichiers de build
+dist/
+build/
+
+# Logs
+logs/
+*.log
+
+# Tests
+coverage/
+.nyc_output/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore

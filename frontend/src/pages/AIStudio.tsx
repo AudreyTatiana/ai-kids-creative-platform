@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
+import { generateAIImages } from "../api/ai";
+import "./AIStudio.css";
 
 function AIStudio() {
   const [theme, setTheme] = useState("Conte");
@@ -13,20 +15,7 @@ function AIStudio() {
       setMessage("");
       setPrompt("");
 
-      const response = await fetch("http://localhost:5000/api/ai/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ theme }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setMessage(data.message || "Erreur lors de la génération.");
-        return;
-      }
+      const { data } = await generateAIImages(theme);
 
       setPrompt(data.prompt);
       setMessage(data.message);
@@ -38,108 +27,30 @@ function AIStudio() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "linear-gradient(180deg, #fffdfd 0%, #f8f5ff 100%)",
-      }}
-    >
+    <div className="ai-studio">
       <Navbar />
 
-      <main
-        style={{
-          maxWidth: "1000px",
-          margin: "0 auto",
-          padding: "48px 24px 80px",
-          display: "grid",
-          gap: "28px",
-        }}
-      >
-        <section
-          style={{
-            background: "#ffffff",
-            borderRadius: "28px",
-            padding: "36px",
-            boxShadow: "0 20px 50px rgba(117, 100, 170, 0.10)",
-            border: "1px solid #efe9fb",
-            textAlign: "center",
-          }}
-        >
-          <p
-            style={{
-              margin: "0 0 10px",
-              color: "#f0aa16",
-              fontSize: "14px",
-              fontWeight: 800,
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-            }}
-          >
-            PETITSRÊVES
-          </p>
+      <main className="ai-studio__main">
+        <section className="ai-studio__header">
+          <p className="ai-studio__brand-label">PETITSRÊVES</p>
 
-          <h1
-            style={{
-              margin: "0 0 14px",
-              color: "#3d3a6d",
-              fontSize: "42px",
-              fontWeight: 800,
-            }}
-          >
-            Studio IA
-          </h1>
+          <h1 className="ai-studio__title">Studio IA</h1>
 
-          <p
-            style={{
-              margin: "0 auto",
-              maxWidth: "760px",
-              color: "#7a7699",
-              fontSize: "16px",
-              lineHeight: 1.8,
-            }}
-          >
+          <p className="ai-studio__subtitle">
             Choisissez un thème et générez automatiquement un prompt de
             transformation IA prêt à être connecté à un moteur de génération
-            d’image.
+            d'image.
           </p>
         </section>
 
-        <section
-          style={{
-            background: "#ffffff",
-            borderRadius: "28px",
-            padding: "28px",
-            boxShadow: "0 20px 50px rgba(117, 100, 170, 0.10)",
-            border: "1px solid #efe9fb",
-            display: "grid",
-            gap: "20px",
-          }}
-        >
+        <section className="ai-studio__form">
           <div>
-            <label
-              style={{
-                display: "block",
-                marginBottom: "8px",
-                color: "#3d3a6d",
-                fontWeight: 700,
-                fontSize: "15px",
-              }}
-            >
-              Choisir un thème
-            </label>
+            <label className="form-label">Choisir un thème</label>
 
             <select
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "14px 16px",
-                borderRadius: "14px",
-                border: "1px solid #ddd4f2",
-                fontSize: "15px",
-                outline: "none",
-                background: "#fff",
-              }}
+              className="ai-studio__select"
             >
               <option>Conte</option>
               <option>Super-héros</option>
@@ -152,66 +63,20 @@ function AIStudio() {
             <button
               onClick={handleGenerate}
               disabled={loading}
-              style={{
-                background: "linear-gradient(135deg, #6f8fff 0%, #9c8cff 100%)",
-                color: "#fff",
-                border: "none",
-                borderRadius: "14px",
-                padding: "14px 20px",
-                fontSize: "15px",
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
+              className="ai-studio__generate-btn"
             >
               {loading ? "Génération..." : "Générer le prompt IA"}
             </button>
           </div>
 
           {message && (
-            <div
-              style={{
-                padding: "14px 16px",
-                borderRadius: "14px",
-                background: "#eef5ff",
-                color: "#3973d6",
-                fontSize: "14px",
-                fontWeight: 700,
-              }}
-            >
-              {message}
-            </div>
+            <div className="ai-studio__message">{message}</div>
           )}
 
           {prompt && (
-            <div
-              style={{
-                background: "#faf8ff",
-                border: "1px solid #eee8fb",
-                borderRadius: "18px",
-                padding: "20px",
-              }}
-            >
-              <h3
-                style={{
-                  margin: "0 0 12px",
-                  color: "#3d3a6d",
-                  fontSize: "22px",
-                  fontWeight: 800,
-                }}
-              >
-                Prompt généré
-              </h3>
-
-              <p
-                style={{
-                  margin: 0,
-                  color: "#5f5989",
-                  fontSize: "15px",
-                  lineHeight: 1.8,
-                }}
-              >
-                {prompt}
-              </p>
+            <div className="ai-studio__prompt-result">
+              <h3 className="ai-studio__prompt-title">Prompt généré</h3>
+              <p className="ai-studio__prompt-text">{prompt}</p>
             </div>
           )}
         </section>

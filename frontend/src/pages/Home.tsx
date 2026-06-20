@@ -5,17 +5,18 @@ import HowItWorksSection from "../components/HowItWorksSection";
 import ProductsSection from "../components/ProductsSection";
 import InfoBanner from "../components/InfoBanner";
 import Layout from "../components/Layout";
+import "./Home.css";
 
 function Home() {
   return (
-    <div style={{ backgroundColor: "#fcfbff", minHeight: "100vh" }}>
+    <div className="home">
       <Layout>
-      <Navbar />
-      <HeroSection />
-      <ExamplesSection />
-      <HowItWorksSection />
-      <ProductsSection />
-      <InfoBanner />
+        <Navbar />
+        <HeroSection />
+        <ExamplesSection />
+        <HowItWorksSection />
+        <ProductsSection />
+        <InfoBanner />
       </Layout>
     </div>
   );
