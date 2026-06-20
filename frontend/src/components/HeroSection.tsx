@@ -31,7 +31,12 @@ function HeroSection() {
 
             <div className="hero__actions">
               <button className="hero__btn-primary" onClick={handleCreateProject}>Créer mon projet</button>
-              <button className="hero__btn-secondary">Voir des exemples</button>
+              <button
+                className="hero__btn-secondary"
+                onClick={() => document.getElementById("exemples")?.scrollIntoView({ behavior: "smooth" })}
+              >
+                Voir des exemples
+              </button>
             </div>
           </div>
 

@@ -1,27 +1,27 @@
 import Container from "./Container";
+import packImages from "../assets/images/pack-images.png";
+import albumPhotos from "../assets/images/album-photos.png";
+import histoirePersonnalisee from "../assets/images/histoire-personalisee.png";
 import "./ProductsSection.css";
 
 const products = [
   {
     title: "Pack d'images",
     price: "29,90€",
-    description: "5 créations IA haute résolution livrées par email",
-    emoji: "📷",
-    gradient: "linear-gradient(135deg, #e8d5ff 0%, #a87fff 100%)",
+    description: "4 créations IA haute résolution livrées par email",
+    image: packImages,
   },
   {
-    title: "Album Photo",
+    title: "Album Photo Magique",
     price: "49,90€",
     description: "Album imprimé 20×20 cm, livré à domicile sous 7 jours",
-    emoji: "📖",
-    gradient: "linear-gradient(135deg, #ffd5e8 0%, #ff8fbe 100%)",
+    image: albumPhotos,
   },
   {
     title: "Histoire personnalisée",
     price: "39,90€",
-    description: "Livre illustré avec votre enfant comme personnage principal",
-    emoji: "📚",
-    gradient: "linear-gradient(135deg, #d5f0ff 0%, #6ab8f0 100%)",
+    description: "Livre illustré avec votre enfant comme personnage principal, livré à domicile",
+    image: histoirePersonnalisee,
   },
 ];
 
@@ -45,15 +45,14 @@ type ProductCardProps = {
   title: string;
   price: string;
   description: string;
-  emoji: string;
-  gradient: string;
+  image: string;
 };
 
-function ProductCard({ title, price, description, emoji, gradient }: ProductCardProps) {
+function ProductCard({ title, price, description, image }: ProductCardProps) {
   return (
     <div className="product-card">
-      <div className="product-card__illustration" style={{ background: gradient }}>
-        <span className="product-card__emoji">{emoji}</span>
+      <div className="product-card__illustration">
+        <img src={image} alt={title} className="product-card__image" />
       </div>
       <h3 className="product-card__title">{title}</h3>
       <p className="product-card__desc">{description}</p>

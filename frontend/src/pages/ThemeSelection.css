@@ -88,15 +88,16 @@
   box-shadow: 0 12px 28px rgba(138, 120, 199, 0.18);
 }
 
-.theme-card__emoji-box {
-  height: 80px;
+.theme-card__img-wrapper {
   border-radius: 14px;
-  background: linear-gradient(135deg, #d9ccff 0%, #c6e4ff 55%, #ffe8f7 100%);
+  overflow: hidden;
   margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
+}
+
+.theme-card__img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .theme-card__title {

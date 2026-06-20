@@ -1,27 +1,27 @@
 import Container from "./Container";
+import televerse from "../assets/images/televerse.png";
+import theme from "../assets/images/theme.png";
+import recevCreation from "../assets/images/recev-creation.png";
 import "./HowItWorksSection.css";
 
 const steps = [
   {
     number: "1",
-    title: "Téléversez 2-4 photos",
+    title: "Téléversez 1-4 photos",
     description: "Importez facilement les photos de votre enfant en quelques secondes depuis votre appareil.",
-    emoji: "📸",
-    gradient: "linear-gradient(135deg, #fff3d5 0%, #ffd07a 100%)",
+    image: televerse,
   },
   {
     number: "2",
     title: "Choisissez un thème",
     description: "Conte, super-héros, pirate ou futuriste — laissez parler votre imagination.",
-    emoji: "🎨",
-    gradient: "linear-gradient(135deg, #e8d5ff 0%, #b89eff 100%)",
+    image: theme,
   },
   {
     number: "3",
     title: "Recevez votre création",
     description: "Obtenez vos images personnalisées par email ou commandez un album physique.",
-    emoji: "✨",
-    gradient: "linear-gradient(135deg, #d5ffe8 0%, #7ae8b0 100%)",
+    image: recevCreation,
   },
 ];
 
@@ -45,16 +45,15 @@ type StepCardProps = {
   number: string;
   title: string;
   description: string;
-  emoji: string;
-  gradient: string;
+  image: string;
 };
 
-function StepCard({ number, title, description, emoji, gradient }: StepCardProps) {
+function StepCard({ number, title, description, image }: StepCardProps) {
   return (
     <div className="step-card">
-      <div className="step-card__illustration" style={{ background: gradient }}>
-        <span className="step-card__emoji">{emoji}</span>
+      <div className="step-card__illustration">
         <span className="step-card__number">{number}</span>
+        <img src={image} alt={title} className="step-card__image" />
       </div>
       <h3 className="step-card__title">{title}</h3>
       <p className="step-card__desc">{description}</p>

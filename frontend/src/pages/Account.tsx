@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import ClientLayout from "../components/client/ClientLayout";
 import "./Account.css";
 
 function Account() {
+  const navigate = useNavigate();
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
 
@@ -46,8 +48,7 @@ function Account() {
             <div className="account-section-card">
               <h3 className="account-section-card__title">Actions</h3>
               <div className="account-actions">
-                <button className="account-btn-primary">Modifier mes informations</button>
-                <button className="account-btn-secondary">Changer le mot de passe</button>
+                <button className="account-btn-primary" onClick={() => navigate("/client/edit-profile")}>Modifier mes informations</button>
               </div>
             </div>
           </div>

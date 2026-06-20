@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installation des dépendances de production uniquement
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # ─────────────────────────────────────────
 # Stage 2 — Production

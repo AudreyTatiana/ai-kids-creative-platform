@@ -62,6 +62,35 @@ async function findAllClients() {
   );
 }
 
+async function updateProfile(id, firstName, lastName, email) {
+  await query(
+    "UPDATE users SET first_name = ?, last_name = ?, email = ? WHERE id = ?",
+    [firstName, lastName, email, id]
+  );
+}
+
+async function saveActivationCode(id, code, expires) {
+  await query(
+    "UPDATE users SET activation_code = ?, activation_expires = ? WHERE id = ?",
+    [code, expires, id]
+  );
+}
+
+async function findByActivationCode(email, code) {
+  const rows = await query(
+    "SELECT * FROM users WHERE email = ? AND activation_code = ? AND activation_expires > NOW()",
+    [email, code]
+  );
+  return rows[0] || null;
+}
+
+async function activateAccount(id) {
+  await query(
+    "UPDATE users SET is_activated = 1, activation_code = NULL, activation_expires = NULL WHERE id = ?",
+    [id]
+  );
+}
+
 module.exports = {
   findByEmail,
   findById,
@@ -70,4 +99,8 @@ module.exports = {
   findByResetToken,
   updatePassword,
   findAllClients,
+  updateProfile,
+  saveActivationCode,
+  findByActivationCode,
+  activateAccount,
 };

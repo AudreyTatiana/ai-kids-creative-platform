@@ -2,13 +2,10 @@ import Layout from "../components/Layout";
 import Container from "../components/Container";
 import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext";
 import "./Services.css";
 
 function Services() {
   const navigate = useNavigate();
-  const { addToCart } = useCart();
-
   const services = [
     {
       icon: "🎨",
@@ -67,12 +64,12 @@ function Services() {
           </div>
 
           <div className="services-grid">
-            <ServiceCard {...services[0]} onAddToCart={addToCart} />
-            <ServiceCard {...services[1]} onAddToCart={addToCart} />
-            <ServiceCard {...services[2]} onAddToCart={addToCart} />
+            <ServiceCard {...services[0]} />
+            <ServiceCard {...services[1]} />
+            <ServiceCard {...services[2]} />
 
             <div className="services-grid__centered">
-              <ServiceCard {...services[3]} onAddToCart={addToCart} />
+              <ServiceCard {...services[3]} />
             </div>
           </div>
         </Container>
@@ -88,18 +85,9 @@ type ServiceCardProps = {
   badge: string;
   button: string;
   action: () => void;
-  onAddToCart: () => void;
 };
 
-function ServiceCard({
-  icon,
-  title,
-  description,
-  badge,
-  button,
-  action,
-  onAddToCart,
-}: ServiceCardProps) {
+function ServiceCard({ icon, title, description, badge, button, action }: ServiceCardProps) {
   return (
     <div className="service-card">
       <div>
@@ -116,10 +104,6 @@ function ServiceCard({
         <div className="service-card__actions">
           <button onClick={action} className="service-card__btn-discover">
             {button}
-          </button>
-
-          <button onClick={onAddToCart} className="service-card__btn-add">
-            Ajouter
           </button>
         </div>
       </div>

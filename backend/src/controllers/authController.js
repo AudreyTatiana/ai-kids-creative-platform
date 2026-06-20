@@ -45,4 +45,40 @@ async function listUsers(req, res) {
   }
 }
 
-module.exports = { register, login, forgotPassword, resetPassword, listUsers };
+async function updateProfile(req, res) {
+  try {
+    const updatedUser = await authService.updateProfile(req.user.id, req.body);
+    return res.status(200).json({
+      message: "Profil mis à jour.",
+      user: {
+        id: updatedUser.id,
+        firstName: updatedUser.first_name,
+        lastName: updatedUser.last_name,
+        email: updatedUser.email,
+        role: updatedUser.role,
+      },
+    });
+  } catch (err) {
+    return res.status(err.status || 500).json({ message: err.message || "Erreur serveur." });
+  }
+}
+
+async function changePassword(req, res) {
+  try {
+    await authService.changePassword(req.user.id, req.body);
+    return res.status(200).json({ message: "Mot de passe modifié avec succès." });
+  } catch (err) {
+    return res.status(err.status || 500).json({ message: err.message || "Erreur serveur." });
+  }
+}
+
+async function verifyActivation(req, res) {
+  try {
+    await authService.verifyActivation(req.body);
+    return res.status(200).json({ message: "Compte activé avec succès. Vous pouvez vous connecter." });
+  } catch (err) {
+    return res.status(err.status || 500).json({ message: err.message || "Erreur serveur." });
+  }
+}
+
+module.exports = { register, login, forgotPassword, resetPassword, listUsers, updateProfile, changePassword, verifyActivation };

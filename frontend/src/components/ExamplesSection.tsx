@@ -1,30 +1,30 @@
 import Container from "./Container";
+import packImages from "../assets/images/pack-images.png";
+import albumPhotos from "../assets/images/album-photos.png";
+import histoirePersonnalisee from "../assets/images/histoire-personalisee.png";
 import "./ExamplesSection.css";
 
 const examples = [
   {
-    title: "Univers féerique",
-    description: "Votre enfant devient le héros d'un conte enchanté",
-    emoji: "🧚",
-    gradient: "linear-gradient(135deg, #e8d5ff 0%, #c4a0ff 100%)",
+    title: "Pack d'images",
+    description: "4 illustrations IA uniques de votre enfant transporté dans un univers magique de votre choix",
+    image: packImages,
   },
   {
-    title: "Aventure pirate",
-    description: "Cap sur les mers, votre enfant prend le large",
-    emoji: "🏴‍☠️",
-    gradient: "linear-gradient(135deg, #d5eeff 0%, #7ec8f8 100%)",
+    title: "Album photos",
+    description: "Un album photo luxueux avec votre enfant illustré en héros, imprimé et livré chez vous",
+    image: albumPhotos,
   },
   {
-    title: "Super-héros",
-    description: "Transformez votre enfant en héros invincible",
-    emoji: "🦸",
-    gradient: "linear-gradient(135deg, #ffd5e8 0%, #ff99cc 100%)",
+    title: "Histoire personnalisée",
+    description: "Un livre illustré sur mesure où votre enfant est le héros de sa propre aventure magique",
+    image: histoirePersonnalisee,
   },
 ];
 
 function ExamplesSection() {
   return (
-    <section className="examples-section">
+    <section className="examples-section" id="exemples">
       <Container>
         <h2 className="examples-section__title">Exemples de créations</h2>
 
@@ -41,15 +41,14 @@ function ExamplesSection() {
 type ExampleCardProps = {
   title: string;
   description: string;
-  emoji: string;
-  gradient: string;
+  image: string;
 };
 
-function ExampleCard({ title, description, emoji, gradient }: ExampleCardProps) {
+function ExampleCard({ title, description, image }: ExampleCardProps) {
   return (
     <div className="example-card">
-      <div className="example-card__illustration" style={{ background: gradient }}>
-        <span className="example-card__emoji">{emoji}</span>
+      <div className="example-card__frame">
+        <img src={image} alt={title} className="example-card__image" />
       </div>
       <div className="example-card__body">
         <h3 className="example-card__title">{title}</h3>

@@ -9,8 +9,9 @@ import "./PaymentPage.css";
 
 const PRICES: Record<string, number> = {
   "Pack d'images": 29.9,
-  "Album Photo": 49.9,
-  "Histoire personnalisée": 39.9,
+  "Cartes Alphabet": 34.9,
+  "Album Photo Magique": 49.9,
+  "Livre d'Aventure": 39.9,
 };
 
 function PaymentPage() {
@@ -25,11 +26,15 @@ function PaymentPage() {
   const fmt = (n: number) => n.toFixed(2).replace(".", ",") + "€";
 
   const handlePay = async () => {
+    if (!project.customer?.email) {
+      setError("Informations manquantes. Veuillez revenir à l'étape précédente.");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
       const { res, data } = await createPaymentSession({
-        product: project.product,
+        product: project.product || "Pack d'images",
         theme: project.theme,
         delivery: project.delivery,
         amount: total,
@@ -55,33 +60,36 @@ function PaymentPage() {
               <p className="payment-card__label">Paiement sécurisé</p>
               <h1 className="payment-card__title">Finalisez votre achat</h1>
               <p className="payment-card__subtitle">
-                Procédez au paiement de votre création PetitsRêves en toute sécurité.
+                Procédez au paiement de votre création PetitsRêves en toute sécurité via Stripe.
               </p>
             </div>
 
             <div className="payment-card__grid">
               <div className="payment-form-block">
-                <h2 className="payment-form-block__title">Informations de paiement</h2>
+                <h2 className="payment-form-block__title">Récapitulatif client</h2>
 
-                <div className="payment-form-block__fields">
-                  <InputBlock label="Nom sur la carte" placeholder="Marie Dupont" />
-                  <InputBlock label="Numéro de carte" placeholder="1234 5678 9012 3456" />
+                <div className="payment-customer-info">
+                  <InfoRow label="Prénom" value={project.customer.firstName} />
+                  <InfoRow label="Nom" value={project.customer.lastName} />
+                  <InfoRow label="Email" value={project.customer.email} />
+                  {project.customer.phone && (
+                    <InfoRow label="Téléphone" value={project.customer.phone} />
+                  )}
+                  {project.delivery === "physical" && project.customer.address && (
+                    <InfoRow
+                      label="Adresse"
+                      value={`${project.customer.address}, ${project.customer.postalCode} ${project.customer.city}`}
+                    />
+                  )}
+                </div>
 
-                  <div className="payment-form-block__two-cols">
-                    <InputBlock label="Date d'expiration" placeholder="MM/AA" />
-                    <InputBlock label="CVC" placeholder="123" />
-                  </div>
-
-                  <div className="billing-block">
-                    <h3 className="billing-block__title">Adresse de facturation</h3>
-                    <div className="billing-block__fields">
-                      <InputBlock label="Adresse" placeholder="12 rue des Lilas" />
-                      <div className="billing-block__two-cols">
-                        <InputBlock label="Ville" placeholder="Paris" />
-                        <InputBlock label="Code postal" placeholder="75015" />
-                      </div>
-                    </div>
-                  </div>
+                <div className="payment-stripe-info">
+                  <p className="payment-stripe-info__title">Comment ça fonctionne ?</p>
+                  <p className="payment-stripe-info__text">
+                    En cliquant sur "Payer en toute sécurité", vous serez redirigé vers la page de
+                    paiement sécurisée de Stripe. Vos informations bancaires sont traitées
+                    directement par Stripe et ne sont jamais transmises à PetitsRêves.
+                  </p>
                 </div>
               </div>
 
@@ -116,15 +124,15 @@ function PaymentPage() {
                 <div className="payment-security">
                   <h3 className="payment-security__title">Paiement 100% sécurisé</h3>
                   <div className="payment-security__list">
-                    <SecurityItem text="Données chiffrées" />
-                    <SecurityItem text="Paiement protégé" />
+                    <SecurityItem text="Données chiffrées SSL" />
+                    <SecurityItem text="Paiement géré par Stripe" />
                     <SecurityItem text="Confirmation par email" />
                   </div>
                 </div>
 
                 <div className="payment-note">
                   <p className="payment-note__text">
-                    Votre réalisation sera générée en version finale après validation du paiement.
+                    Votre réalisation sera conservée pendant 14 jours si le paiement n'est pas finalisé.
                   </p>
                 </div>
               </div>
@@ -136,11 +144,11 @@ function PaymentPage() {
   );
 }
 
-function InputBlock({ label, placeholder }: { label: string; placeholder: string }) {
+function InfoRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="payment-input-block">
-      <label>{label}</label>
-      <input placeholder={placeholder} />
+    <div className="payment-info-row">
+      <span className="payment-info-row__label">{label}</span>
+      <span className="payment-info-row__value">{value}</span>
     </div>
   );
 }

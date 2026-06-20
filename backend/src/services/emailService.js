@@ -194,4 +194,38 @@ async function sendContactConfirmation({ email, message }) {
   });
 }
 
-module.exports = { sendOrderConfirmation, sendPasswordReset, sendContactConfirmation, sendWelcomeEmail };
+async function sendActivationEmail({ email, firstName, code }) {
+  const transporter = getTransporter();
+
+  const html = `
+    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;border:1px solid #eee;">
+      <div style="background:linear-gradient(135deg,#6f8fff,#9c8cff);padding:32px;text-align:center;">
+        <h1 style="color:#fff;margin:0;font-size:28px;">✨ PetitsRêves</h1>
+        <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;">Activez votre compte</p>
+      </div>
+      <div style="padding:32px;">
+        <p style="color:#3d3a6d;font-size:16px;">Bonjour <strong>${firstName}</strong> 👋,</p>
+        <p style="color:#7a7699;">Merci pour votre inscription ! Pour activer votre compte, entrez le code ci-dessous sur la page de vérification.</p>
+        <div style="text-align:center;margin:32px 0;">
+          <div style="display:inline-block;background:linear-gradient(135deg,#f3efff,#eef2ff);border:2px solid #ddd6fe;border-radius:16px;padding:24px 40px;">
+            <p style="color:#7a7699;font-size:13px;margin:0 0 8px;text-transform:uppercase;letter-spacing:2px;">Votre code d'activation</p>
+            <p style="color:#3d3a6d;font-size:40px;font-weight:900;letter-spacing:10px;margin:0;">${code}</p>
+          </div>
+        </div>
+        <p style="color:#8f89b2;font-size:13px;text-align:center;">Ce code est valable <strong>24 heures</strong>.</p>
+        <div style="background:#faf8ff;border-radius:12px;padding:16px;margin-top:24px;">
+          <p style="color:#8f89b2;font-size:13px;margin:0;">Si vous n'avez pas créé de compte sur PetitsRêves, ignorez cet email.</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: `"PetitsRêves" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "✨ Votre code d'activation PetitsRêves",
+    html,
+  });
+}
+
+module.exports = { sendOrderConfirmation, sendPasswordReset, sendContactConfirmation, sendWelcomeEmail, sendActivationEmail };

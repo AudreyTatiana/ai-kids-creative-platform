@@ -5,13 +5,19 @@ import Navbar from "../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { useAI } from "../context/AIContext";
 import { generateAIWithFormData } from "../api/ai";
+import animauxImg from "../assets/images/enfant-lettre-aplhabet.png";
+import herosImg from "../assets/images/heros.png";
+import pirateImg from "../assets/images/pirate.png";
+import feeriqeImg from "../assets/images/feerique.png";
+import princesseImg from "../assets/images/princesse.png";
+import astronauteImg from "../assets/images/astronaute.png";
 import "./ThemeSelection.css";
 
-const THEMES = ["Conte", "Super-héros", "Pirate", "Univers féerique", "Princesse", "Astronaute"];
+const THEMES = ["Animaux", "Super-héros", "Pirate", "Univers féerique", "Princesse", "Astronaute"];
 const PRODUCTS = [
   { title: "Pack d'images", price: "29,90€" },
-  { title: "Album Photo", price: "49,90€" },
-  { title: "Histoire personnalisée", price: "39,90€" },
+  { title: "Album Photo Magique", price: "49,90€" },
+  { title: "Livre d'Aventure", price: "39,90€" },
 ];
 
 function ThemeSelection() {
@@ -37,6 +43,10 @@ function ThemeSelection() {
     try {
       const formData = new FormData();
       formData.append("theme", selectedTheme);
+      formData.append("product", selectedProduct);
+      if (project.customer?.firstName) {
+        formData.append("childName", project.customer.firstName);
+      }
       project.images.forEach((img) => formData.append("images", img));
 
       const { res, data } = await generateAIWithFormData(formData);
@@ -116,18 +126,21 @@ function ThemeSelection() {
   );
 }
 
+const themeImages: Record<string, string> = {
+  "Animaux": animauxImg,
+  "Super-héros": herosImg,
+  "Pirate": pirateImg,
+  "Univers féerique": feeriqeImg,
+  "Princesse": princesseImg,
+  "Astronaute": astronauteImg,
+};
+
 function ThemeCard({ title, selected, onClick }: { title: string; selected: boolean; onClick: () => void }) {
-  const emojis: Record<string, string> = {
-    "Conte": "🧚",
-    "Super-héros": "🦸",
-    "Pirate": "🏴‍☠️",
-    "Univers féerique": "✨",
-    "Princesse": "👸",
-    "Astronaute": "🚀",
-  };
   return (
     <div onClick={onClick} className={`theme-card${selected ? " theme-card--selected" : ""}`}>
-      <div className="theme-card__emoji-box">{emojis[title]}</div>
+      <div className="theme-card__img-wrapper">
+        <img src={themeImages[title]} alt={title} className="theme-card__img" />
+      </div>
       <p className="theme-card__title">{title}</p>
     </div>
   );

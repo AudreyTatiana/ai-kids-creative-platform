@@ -1,5 +1,5 @@
 const { fal } = require("@fal-ai/client");
-const { buildPrompt } = require("../utils/promptBuilder");
+const { buildPrompts } = require("../utils/promptBuilder");
 const fs = require("fs");
 
 // Configuration fal.ai (FAL_KEY dans le .env)
@@ -20,18 +20,17 @@ async function uploadImageToFal(imagePath, mimetype, filename) {
  * Génère 3 images avec FLUX.1 Kontext Pro via fal.ai.
  * Si FAL_KEY est absent → retourne des placeholders (mode test).
  */
-async function generateImage(theme, images) {
+async function generateImage(theme, images, product = null, childName = null) {
   if (!theme) throw new Error("Le thème est obligatoire.");
   if (!images || images.length === 0) throw new Error("Au moins une image est obligatoire.");
 
-  const prompt = buildPrompt(theme);
+  const prompts = buildPrompts(product, theme, childName);
 
   // MODE TEST si pas de clé API
   if (!process.env.FAL_KEY) {
     console.warn("[AI] FAL_KEY absent — mode test activé.");
     return {
       theme,
-      prompt,
       inputImages: images.map((img) => ({
         originalName: img.originalname,
         fileName: img.filename,
@@ -42,6 +41,7 @@ async function generateImage(theme, images) {
         "https://placehold.co/512x512/d9ccff/3d3a6d?text=Apercu+1",
         "https://placehold.co/512x512/c6e4ff/3d3a6d?text=Apercu+2",
         "https://placehold.co/512x512/ffe8f7/3d3a6d?text=Apercu+3",
+        "https://placehold.co/512x512/fff0cc/3d3a6d?text=Apercu+4",
       ],
     };
   }
@@ -56,26 +56,39 @@ async function generateImage(theme, images) {
   );
   console.log(`[AI] Image uploadée : ${imageUrl}`);
 
-  // Appel FLUX.1 Kontext Pro
-  console.log(`[AI] Génération FLUX.1 Kontext — thème : ${theme}`);
-  const result = await fal.subscribe("fal-ai/flux-pro/kontext", {
-    input: {
-      prompt,
-      image_url: imageUrl,
-      num_images: 3,
-      aspect_ratio: "1:1",
-      output_format: "jpeg",
-      safety_tolerance: "2",
-    },
-    logs: true,
-    onQueueUpdate: (update) => {
-      if (update.status === "IN_PROGRESS" && update.logs) {
-        update.logs.forEach((log) => console.log("[FAL]", log.message));
-      }
-    },
-  });
+  // 4 appels parallèles — un prompt distinct par aperçu
+  console.log(`[AI] Génération FLUX.1 Kontext — 4 variants pour thème : ${theme}, produit : ${product}`);
+  const results = await Promise.all(
+    prompts.map((prompt, i) =>
+      fal.subscribe("fal-ai/flux-pro/kontext", {
+        input: {
+          prompt,
+          image_url: imageUrl,
+          num_images: 1,
+          aspect_ratio: "1:1",
+          output_format: "jpeg",
+          safety_tolerance: "3",
+        },
+        logs: false,
+        onQueueUpdate: (update) => {
+          if (update.status === "IN_PROGRESS") {
+            console.log(`[FAL] Variant ${i + 1} en cours...`);
+          }
+        },
+      }).catch((err) => {
+        console.warn(`[FAL] Variant ${i + 1} échoué : ${err.message}`);
+        return null;
+      })
+    )
+  );
 
-  const generatedImages = result.data.images.map((img) => img.url);
+  const generatedImages = results.map((r, i) => {
+    if (!r || !r.data?.images?.[0]?.url) {
+      console.warn(`[FAL] Variant ${i + 1} sans image valide — placeholder utilisé.`);
+      return `https://placehold.co/512x512/e8e0f7/3d3a6d?text=Apercu+${i + 1}`;
+    }
+    return r.data.images[0].url;
+  });
   console.log(`[AI] ${generatedImages.length} image(s) générée(s).`);
 
   // Nettoyage des fichiers temporaires uploadés
@@ -85,7 +98,6 @@ async function generateImage(theme, images) {
 
   return {
     theme,
-    prompt,
     inputImages: images.map((img) => ({
       originalName: img.originalname,
       fileName: img.filename,

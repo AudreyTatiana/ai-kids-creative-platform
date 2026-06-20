@@ -17,19 +17,15 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const { project, setDelivery, setCustomer } = useAI();
 
-  // Pré-remplir avec le compte connecté si l'email du projet est vide
-  const storedUser = localStorage.getItem("user");
-  const loggedInUser = storedUser ? JSON.parse(storedUser) : null;
-
   const [delivery, setLocalDelivery] = useState<"email" | "physical">(project.delivery);
-  const [firstName, setFirstName] = useState(project.customer.firstName || loggedInUser?.firstName || "");
-  const [lastName, setLastName] = useState(project.customer.lastName || loggedInUser?.lastName || "");
-  const [email, setEmail] = useState(project.customer.email || loggedInUser?.email || "");
-  const [phone, setPhone] = useState(project.customer.phone || "");
-  const [address, setAddress] = useState(project.customer.address || "");
-  const [city, setCity] = useState(project.customer.city || "");
-  const [postalCode, setPostalCode] = useState(project.customer.postalCode || "");
-  const [country, setCountry] = useState(project.customer.country || "France");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [country, setCountry] = useState("France");
   const [error, setError] = useState("");
 
   const basePrice = PRICES[project.product] ?? 29.9;
@@ -180,7 +176,7 @@ function InputBlock({ label, placeholder, value, onChange }: { label: string; pl
   return (
     <div className="checkout-input-block">
       <label>{label}</label>
-      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} />
+      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} autoComplete="off" />
     </div>
   );
 }

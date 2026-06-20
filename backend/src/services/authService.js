@@ -15,11 +15,27 @@ async function registerUser({ firstName, lastName, email, password }) {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  await userRepository.create({ firstName, lastName, email, hashedPassword, role: "client" });
+  const userId = await userRepository.create({ firstName, lastName, email, hashedPassword, role: "client" });
 
-  sendWelcomeEmail({ email, firstName }).catch((err) =>
-    console.error("Erreur email bienvenue:", err.message)
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  await userRepository.saveActivationCode(userId, code, expires);
+
+  const { sendActivationEmail } = require("./emailService");
+  sendActivationEmail({ email, firstName, code }).catch((err) =>
+    console.error("Erreur email activation:", err.message)
   );
+}
+
+async function verifyActivation({ email, code }) {
+  if (!email || !code) {
+    throw { status: 400, message: "Email et code obligatoires." };
+  }
+  const user = await userRepository.findByActivationCode(email, code);
+  if (!user) {
+    throw { status: 400, message: "Code invalide ou expiré." };
+  }
+  await userRepository.activateAccount(user.id);
 }
 
 async function loginUser({ email, password }) {
@@ -30,6 +46,10 @@ async function loginUser({ email, password }) {
   const user = await userRepository.findByEmail(email);
   if (!user) {
     throw { status: 401, message: "Email ou mot de passe incorrect." };
+  }
+
+  if (!user.is_activated) {
+    throw { status: 403, message: "Compte non activé. Vérifiez votre email pour le code d'activation." };
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -82,18 +102,47 @@ async function resetUserPassword({ token, password }) {
     throw { status: 400, message: "Lien invalide ou expiré." };
   }
 
-  const hashed = await bcrypt.hash(password, 10);
-  await userRepository.updatePassword(user.id, hashed);
+  const hashedPassword = await bcrypt.hash(password, 10);
+  await userRepository.updatePassword(user.id, hashedPassword);
 }
 
 async function getAllClients() {
   return await userRepository.findAllClients();
 }
 
+async function updateProfile(userId, { firstName, lastName, email }) {
+  if (!firstName || !lastName || !email) {
+    throw { status: 400, message: "Prénom, nom et email sont obligatoires." };
+  }
+  const existing = await userRepository.findByEmail(email);
+  if (existing && existing.id !== userId) {
+    throw { status: 400, message: "Cet email est déjà utilisé par un autre compte." };
+  }
+  await userRepository.updateProfile(userId, firstName, lastName, email);
+  return await userRepository.findById(userId);
+}
+
+async function changePassword(userId, { currentPassword, newPassword }) {
+  if (!currentPassword || !newPassword) {
+    throw { status: 400, message: "Mot de passe actuel et nouveau mot de passe obligatoires." };
+  }
+  const user = await userRepository.findById(userId);
+  if (!user) throw { status: 404, message: "Utilisateur introuvable." };
+
+  const isValid = await bcrypt.compare(currentPassword, user.password);
+  if (!isValid) throw { status: 401, message: "Mot de passe actuel incorrect." };
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await userRepository.updatePassword(userId, hashedPassword);
+}
+
 module.exports = {
   registerUser,
+  verifyActivation,
   loginUser,
   requestPasswordReset,
   resetUserPassword,
   getAllClients,
+  updateProfile,
+  changePassword,
 };

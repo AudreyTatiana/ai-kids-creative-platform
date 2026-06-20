@@ -61,14 +61,42 @@
 }
 
 .example-page-card__visual {
-  height: 220px;
   background: linear-gradient(135deg, #d9ccff 0%, #c6e4ff 55%, #ffe8f7 100%);
+  overflow: hidden;
+}
+
+.example-page-card__img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.example-page-card__badge-pill {
+  display: inline-block;
+  background: linear-gradient(135deg, #6f8fff, #9c8cff);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  letter-spacing: 0.3px;
+}
+
+.example-page-card__themes {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-primary);
-  font-size: 20px;
-  font-weight: 800;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.example-page-card__theme-pill {
+  background: #f3efff;
+  color: #6f5fc8;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
 }
 
 .example-page-card__body {

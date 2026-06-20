@@ -87,9 +87,9 @@ function Register() {
         return;
       }
 
-      setSuccessMessage("Inscription réussie !");
+      setSuccessMessage("Inscription réussie ! Redirection vers l'activation...");
       setErrorMessage("");
-      setCountdown(3);
+      setTimeout(() => navigate("/verify-activation", { state: { email } }), 1500);
     } catch {
       setErrorMessage("Impossible de contacter le serveur.");
       setSuccessMessage("");
@@ -121,7 +121,7 @@ function Register() {
               <div className="alert-error alert-error--mb">{errorMessage}</div>
             )}
 
-            <form onSubmit={handleSubmit} className="register-form">
+            <form onSubmit={handleSubmit} className="register-form" autoComplete="off">
               <div className="register-form__two-cols">
                 <div>
                   <label className="form-label">Prénom</label>
@@ -164,6 +164,7 @@ function Register() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Choisissez un mot de passe"
                     className="form-input"
+                    autoComplete="new-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -194,6 +195,7 @@ function Register() {
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirmez votre mot de passe"
                     className="form-input"
+                    autoComplete="new-password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   />
