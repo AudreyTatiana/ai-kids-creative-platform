@@ -33,8 +33,7 @@ COPY . .
 RUN mkdir -p uploads
 
 # ⚠️ Sécurité : création d'un utilisateur non-root
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-RUN chown -R appuser:appgroup /app
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup && chown -R appuser:appgroup /app
 
 # Bascule sur l'utilisateur non-root
 USER appuser
