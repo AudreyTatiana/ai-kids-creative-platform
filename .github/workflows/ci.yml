@@ -82,7 +82,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}/backend
+          images: ghcr.io/audreytatiana/ai-kids-creative-platform/backend
           tags: |
             type=ref,event=branch
             type=sha,prefix=sha-
@@ -102,7 +102,7 @@ jobs:
       - name: Scan Trivy — vulnérabilités image
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ghcr.io/${{ github.repository }}/backend:latest
+          image-ref: ghcr.io/audreytatiana/ai-kids-creative-platform/backend:latest
           format: sarif
           output: trivy-results.sarif
           severity: HIGH,CRITICAL
