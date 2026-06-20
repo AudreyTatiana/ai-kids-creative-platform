@@ -102,7 +102,7 @@ jobs:
       - name: Scan Trivy — vulnérabilités image
         uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ghcr.io/audreytatiana/ai-kids-creative-platform/backend:latest
+          image-ref: ghcr.io/audreytatiana/ai-kids-creative-platform/backend:${{ github.ref_name }}
           format: sarif
           output: trivy-results.sarif
           severity: HIGH,CRITICAL
