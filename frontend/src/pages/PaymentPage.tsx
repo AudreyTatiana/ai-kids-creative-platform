@@ -2,7 +2,6 @@ import Layout from "../components/Layout";
 import Container from "../components/Container";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAI } from "../context/AIContext";
 import { createPaymentSession } from "../api/payment";
 import "./PaymentPage.css";
@@ -15,7 +14,6 @@ const PRICES: Record<string, number> = {
 };
 
 function PaymentPage() {
-  const navigate = useNavigate();
   const { project } = useAI();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
