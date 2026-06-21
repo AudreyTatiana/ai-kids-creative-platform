@@ -46,7 +46,7 @@ async function generateImage(theme, images, product = null, childName = null) {
     };
   }
 
-  // Upload de la première image vers fal.ai
+
   const firstImage = images[0];
   console.log(`[AI] Upload image vers fal.ai : ${firstImage.originalname}`);
   const imageUrl = await uploadImageToFal(
@@ -56,7 +56,7 @@ async function generateImage(theme, images, product = null, childName = null) {
   );
   console.log(`[AI] Image uploadée : ${imageUrl}`);
 
-  // 4 appels parallèles — un prompt distinct par aperçu
+
   console.log(`[AI] Génération FLUX.1 Kontext — 4 variants pour thème : ${theme}, produit : ${product}`);
   const results = await Promise.all(
     prompts.map((prompt, i) =>

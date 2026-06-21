@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("../src/app");
 
 describe("Auth — /api/auth", () => {
-  // ─── INSCRIPTION ───────────────────────────────────────────────
+  // INSCRIPTION
   describe("POST /api/auth/register", () => {
     it("doit retourner 400 si des champs sont manquants", async () => {
       const res = await request(app)
@@ -18,15 +18,15 @@ describe("Auth — /api/auth", () => {
         .send({
           firstName: "Test",
           lastName: "User",
-          email: "audreytatiana07@gmail.com",
-          password: "Test@1234567",
+          email: "admin@petitsreves.com",
+          password: "Test@12345678",
         });
       expect(res.statusCode).toBe(400);
     });
   });
 
-  // ─── CONNEXION ─────────────────────────────────────────────────
-  describe("POST /api/auth/login", () => {
+  //  CONNEXION
+describe("POST /api/auth/login", () => {
     it("doit retourner 400 si email ou mot de passe manquant", async () => {
       const res = await request(app)
         .post("/api/auth/login")

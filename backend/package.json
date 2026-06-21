@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "jest --testPathPattern=tests/ --forceExit --detectOpenHandles"
+    "test": "jest --testPathPatterns=tests/ --forceExit --detectOpenHandles"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFiles": ["./jest.setup.js"]
   },
   "keywords": [],
   "author": "",

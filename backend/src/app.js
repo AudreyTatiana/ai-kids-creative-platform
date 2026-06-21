@@ -35,9 +35,9 @@ app.use(cors({
 
 // Rate limiting — protection brute force sur les routes auth
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20,
-  message: { message: "Trop de tentatives. Réessayez dans 15 minutes." },
+  windowMs: 2 * 60 * 1000, // 2 minutes
+  max: process.env.NODE_ENV === "test" ? 1000 : 3,
+  message: { message: "Trop de tentatives. Réessayez dans 2 minutes." },
   standardHeaders: true,
   legacyHeaders: false,
 });
