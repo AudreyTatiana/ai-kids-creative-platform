@@ -2,7 +2,10 @@ import { API_URL } from "./client";
 
 /** Toutes les commandes (admin) */
 export async function fetchAllOrders() {
-  const res = await fetch(`${API_URL}/api/orders`);
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${API_URL}/api/orders`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
   return res.json();
 }
 
