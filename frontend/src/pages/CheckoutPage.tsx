@@ -106,10 +106,10 @@ function CheckoutPage() {
                 <div className="checkout-block">
                   <h2 className="checkout-block__title">Informations client</h2>
                   <div className="checkout-customer-grid">
-                    <InputBlock label="Prénom *" placeholder="Marie" value={firstName} onChange={setFirstName} />
-                    <InputBlock label="Nom *" placeholder="Dupont" value={lastName} onChange={setLastName} />
-                    <InputBlock label="Email *" placeholder="marie@email.com" value={email} onChange={setEmail} />
-                    <InputBlock label="Téléphone" placeholder="06 12 34 56 78" value={phone} onChange={setPhone} />
+                    <InputBlock label="Prénom *" placeholder="" value={firstName} onChange={setFirstName} />
+                    <InputBlock label="Nom *" placeholder="" value={lastName} onChange={setLastName} />
+                    <InputBlock label="Email *" placeholder="" value={email} onChange={setEmail} />
+                    <InputBlock label="Téléphone" placeholder="" value={phone} onChange={setPhone} />
                   </div>
                 </div>
 
